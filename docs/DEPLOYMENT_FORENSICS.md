@@ -18,6 +18,12 @@ The raw transaction, receipt, lifecycle response, fee configuration, RPC
 method probes, and derived comparison are in
 `evidence/forensics/studio-dev-forensics.json`.
 
+The later read-only forensic capture reports the deployer at latest/pending
+nonce `14`. That is outside the supplied incident window ending at `13`; no
+supported RPC history method or local journal identifies the intervening
+nonce. This pass did not submit it, so it remains a separate external-state
+blocker.
+
 ## Root cause: second broadcast
 
 The former control flow was:

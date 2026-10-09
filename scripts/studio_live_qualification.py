@@ -563,7 +563,15 @@ class LiveWriter:
 
         reader = threading.Thread(target=read_output, name=f"licenseproof-{label}", daemon=True)
         reader.start()
-        if not hash_event.wait(timeout=600):
+        deadline = time.monotonic() + 600
+        while not hash_event.is_set() and time.monotonic() < deadline:
+            if process.poll() is not None:
+                reader.join(timeout=10)
+                raise QualificationError(
+                    f"{label} CLI exited before a transaction hash (exit {process.returncode}): {' | '.join(output[-20:])}"
+                )
+            hash_event.wait(timeout=1)
+        if not hash_event.is_set():
             process.terminate()
             process.wait(timeout=30)
             raise QualificationError(f"{label} produced no transaction hash: {' | '.join(output[-20:])}")

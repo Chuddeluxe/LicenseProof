@@ -1,0 +1,21 @@
+{
+  "rpc": "https://studio-dev.genlayer.com/api",
+  "chain_id": 61997,
+  "active_account": "firewall-only",
+  "deployer_address": "0x33653e6e86807e41682d3346cdf648d6653384b1",
+  "balance_rpc": "eth_getBalance(latest)",
+  "balance_hex": "0x12072a20c4dfa990",
+  "balance_wei": "1299053337749989776",
+  "balance_gen": "1.2990533377499898",
+  "latest_nonce_hex": "0xb",
+  "latest_nonce": 11,
+  "pending_nonce_hex": "0xb",
+  "pending_nonce": 11,
+  "estimated_deployment_fee_wei": "76548000002588",
+  "estimated_deployment_fee_gen": "0.000076548000002588",
+  "balance_surplus_wei": "1298976789749987188",
+  "balance_surplus_gen": "1.298976789749987",
+  "preflight_funded": true,
+  "source": "read-only JSON-RPC batch ids 6-9",
+  "captured_at": "2026-10-09 Africa/Lagos"
+}

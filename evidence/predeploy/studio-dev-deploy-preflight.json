@@ -1,0 +1,24 @@
+{
+  "rpc": "https://studio-dev.genlayer.com/api",
+  "chain_id": 61997,
+  "request_id": 4,
+  "method": "gen_call",
+  "request": {
+    "type": "deploy",
+    "from": "0x33653e6e86807e41682d3346cdf648d6653384b1",
+    "to": "0x0000000000000000000000000000000000000000",
+    "status": "finalized",
+    "constructor_args": [],
+    "source_sha256": "77fb66904787baab72210276f29d6c0cc29831e2d243cecad5c2eb249146c0c4",
+    "source_utf8_bytes": 38510,
+    "serialized_deploy_payload_hex_bytes": 38518,
+    "serialization": "genlayer_py.abi.transactions.serialize([source, calldata.encode(make_calldata_object(method=None,args=None,kwargs=None)), False])"
+  },
+  "raw_response": {
+    "jsonrpc": "2.0",
+    "result": "00",
+    "id": 4
+  },
+  "execution": "PASS: read-only gen_call deploy simulation returned success; no transaction hash, signature, or broadcast",
+  "captured_at": "2026-10-09 Africa/Lagos"
+}

@@ -14,6 +14,7 @@ import hashlib
 import json
 import os
 import re
+import shutil
 import subprocess
 import sys
 import threading
@@ -439,7 +440,7 @@ def parse_json_string(value: Any) -> dict[str, Any]:
 
 def find_node_cli() -> tuple[str, str]:
     appdata = Path(os.environ.get("APPDATA", Path.home() / "AppData" / "Roaming"))
-    node = appdata / "npm" / "node.exe"
+    node = Path(shutil.which("node") or (appdata / "npm" / "node.exe"))
     cli = appdata / "npm" / "node_modules" / "genlayer" / "dist" / "index.js"
     if not node.exists() or not cli.exists():
         raise QualificationError(f"installed GenLayer CLI runtime not found: {node} / {cli}")

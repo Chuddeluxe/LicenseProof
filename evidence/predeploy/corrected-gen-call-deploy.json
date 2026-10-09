@@ -1,0 +1,31 @@
+{
+  "broadcast": false,
+  "chainId": 61997,
+  "fees": {
+    "distribution": {
+      "appealRounds": 0,
+      "executionBudgetPerRound": 25000000000000000,
+      "executionConsumed": 0,
+      "leaderTimeunitsAllocation": 100,
+      "maxPriceGenPerTimeUnit": 2,
+      "receiptFeeMaxGasPrice": 300000000,
+      "rotations": [
+        3
+      ],
+      "storageFeeMaxGasPrice": 300000000,
+      "totalMessageFees": 0,
+      "validatorTimeunitsAllocation": 200
+    },
+    "feeValue": 100000000000010352
+  },
+  "network": "studio-dev",
+  "response": {
+    "id": 1000,
+    "jsonrpc": "2.0",
+    "result": "00"
+  },
+  "result": "00",
+  "rpc": "https://studio-dev.genlayer.com/api",
+  "serialized_deploy_sha256": "ac5d65aed9ce87105c7b266b37bf8561d8c3bfb773af9d7827a5724b5b487674",
+  "source_sha256": "77fb66904787baab72210276f29d6c0cc29831e2d243cecad5c2eb249146c0c4"
+}

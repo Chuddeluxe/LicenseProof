@@ -1,10 +1,9 @@
 """Single-deployment Studio-dev qualification harness for LicenseProof.
 
-This harness intentionally keeps signing inside the already configured GenLayer
-CLI account. It never reads, prints, exports, or stores private key material.
-All RPC reads are performed directly or through genlayer-py 0.19.0rc2. Every
-broadcast is one subprocess invocation, and its protocol hash is journaled and
-fsynced before the harness advances to finality or the next write.
+This module retains the read-only qualification helpers used by the original
+candidate.  Live submission is intentionally delegated to
+``scripts.studio_deploy_harness``.  The old CLI subprocess/hash-parser path is
+removed: no write may be submitted from this module.
 """
 
 from __future__ import annotations
@@ -14,10 +13,8 @@ import hashlib
 import json
 import os
 import re
-import shutil
 import subprocess
 import sys
-import threading
 import time
 import urllib.error
 import urllib.request
@@ -66,7 +63,6 @@ SEMANTIC_FIELDS = (
     "patent_condition_present",
     "evidence_sufficient",
 )
-TX_HASH_RE = re.compile(r"(?:Transaction Hash|transaction hash):\s*(0x[0-9a-fA-F]{64})")
 JOURNAL_PHASE_STARTED = "broadcast_started"
 JOURNAL_PHASE_HASH = "tx_hash_persisted"
 JOURNAL_PHASE_RECONCILED = "reconciled"
@@ -219,8 +215,11 @@ def source_and_freeze() -> str:
     if status:
         allowed_prefixes = (
             "evidence/qualification/",
+            "evidence/predeploy/",
             "docs/LIVE_",
+            "docs/DEPLOYMENT_ALIGNMENT.md",
             "scripts/studio_live_qualification.py",
+            "scripts/studio_deploy_harness.py",
             "scripts/studio_forensics.py",
             "tests/harness/",
         )
@@ -519,27 +518,17 @@ def parse_json_string(value: Any) -> dict[str, Any]:
     return parsed
 
 
-def find_node_cli() -> tuple[str, str]:
-    appdata = Path(os.environ.get("APPDATA", Path.home() / "AppData" / "Roaming"))
-    node = Path(shutil.which("node") or (appdata / "npm" / "node.exe"))
-    cli = appdata / "npm" / "node_modules" / "genlayer" / "dist" / "index.js"
-    if not node.exists() or not cli.exists():
-        raise QualificationError(f"installed GenLayer CLI runtime not found: {node} / {cli}")
-    return str(node), str(cli)
-
-
-def scalar_arg(value: Any) -> str:
-    if isinstance(value, bool):
-        return "true" if value else "false"
-    return str(value)
-
-
 class LiveWriter:
-    def __init__(self, rpc: Rpc, client: GenLayerClient, node: str, cli: str) -> None:
+    """Read-only compatibility wrapper; live writes use the new direct harness.
+
+    Keeping this explicit refusal prevents an old caller from silently
+    reactivating the failed CLI broadcast architecture.  The corrected sender
+    is ``OneShotDeploymentSender`` in ``studio_deploy_harness.py``.
+    """
+
+    def __init__(self, rpc: Rpc, client: GenLayerClient) -> None:
         self.rpc = rpc
         self.client = client
-        self.node = node
-        self.cli = cli
 
     def reconcile(self, tx_hash: str, timeout_seconds: int = 1200) -> dict[str, Any]:
         deadline = time.monotonic() + timeout_seconds
@@ -580,166 +569,9 @@ class LiveWriter:
         fee_result: dict[str, Any],
         deployment: bool = False,
     ) -> tuple[str, dict[str, Any]]:
-        prior_unresolved = unresolved_broadcast_attempt(journal_path)
-        if prior_unresolved is not None:
-            raise QualificationError(
-                "unresolved broadcast attempt is a permanent stop condition; "
-                f"recover attempt_id={prior_unresolved.get('attempt_id')} "
-                f"nonce={prior_unresolved.get('pre_write_nonce')} before resubmitting"
-            )
-        prior_intent = unresolved_broadcast_intent(journal_path)
-        if prior_intent is not None:
-            raise QualificationError(
-                "unresolved broadcast intent is a permanent stop condition; "
-                f"recover attempt_id={prior_intent.get('attempt_id')} "
-                f"nonce={prior_intent.get('pre_write_nonce')} before resubmitting"
-            )
-        fee_json = json.dumps(
-            {
-                "distribution": fee_result["result"]["defaultFees"]["distribution"],
-                "feeValue": fee_result["result"]["defaultFees"]["feeValue"],
-            },
-            separators=(",", ":"),
+        raise QualificationError(
+            "legacy CLI write path removed; use scripts.studio_deploy_harness with a direct SDK request"
         )
-        if deployment:
-            command = [
-                self.node,
-                self.cli,
-                "deploy",
-                "--contract",
-                str(CONTRACT),
-                "--rpc",
-                RPC,
-                "--wallet",
-                "keystore",
-                "--fees",
-                fee_json,
-            ]
-        else:
-            if address is None:
-                raise QualificationError("write address is required")
-            command = [
-                self.node,
-                self.cli,
-                "write",
-                address,
-                method,
-                "--rpc",
-                RPC,
-                "--wallet",
-                "keystore",
-                "--fees",
-                fee_json,
-                "--args",
-                *[scalar_arg(value) for value in args],
-            ]
-        attempt_id = new_attempt_id(label, method, pre_write_nonce, calldata_digest)
-        started_record = {
-            "phase": JOURNAL_PHASE_STARTED,
-            "attempt_id": attempt_id,
-            "label": label,
-            "method": method,
-            "arguments": args,
-            "from": DEPLOYER,
-            "network": NETWORK,
-            "chainId": CHAIN_ID,
-            "pre_write_nonce": pre_write_nonce,
-            "calldata_sha256": calldata_digest,
-            "fee_estimate": fee_result,
-            "tx_hash": None,
-            "finality": None,
-            "execution_result": None,
-            "canonical_readback": None,
-            "timestamp": utc_now(),
-        }
-        # This record is fsynced before Popen. If Popen or the CLI fails after
-        # the provider accepted the request, a later process must stop rather
-        # than risk a second transaction with the same intended write.
-        append_jsonl(journal_path, started_record)
-        write_json(
-            broadcast_intent_path(journal_path),
-            {**started_record, "status": "broadcast_possible"},
-        )
-        process = subprocess.Popen(
-            command,
-            cwd=ROOT,
-            stdout=subprocess.PIPE,
-            stderr=subprocess.STDOUT,
-            text=True,
-            encoding="utf-8",
-            errors="replace",
-            bufsize=1,
-        )
-        output: list[str] = []
-        hash_holder: dict[str, str] = {}
-        hash_event = threading.Event()
-
-        def read_output() -> None:
-            assert process.stdout is not None
-            for line in process.stdout:
-                output.append(line.rstrip())
-                # The RC CLI may print the label and hash on separate lines.
-                match = TX_HASH_RE.search("\n".join(output))
-                if match and "tx_hash" not in hash_holder:
-                    hash_holder["tx_hash"] = match.group(1)
-                    hash_event.set()
-
-        reader = threading.Thread(target=read_output, name=f"licenseproof-{label}", daemon=True)
-        reader.start()
-        deadline = time.monotonic() + 600
-        while not hash_event.is_set() and time.monotonic() < deadline:
-            if process.poll() is not None:
-                reader.join(timeout=10)
-                raise QualificationError(
-                    f"{label} CLI exited before a transaction hash (exit {process.returncode}): {' | '.join(output[-20:])}"
-                )
-            hash_event.wait(timeout=1)
-        if not hash_event.is_set():
-            process.terminate()
-            process.wait(timeout=30)
-            raise QualificationError(f"{label} produced no transaction hash: {' | '.join(output[-20:])}")
-        tx_hash = hash_holder["tx_hash"]
-        initial_record = {
-            **started_record,
-            "phase": JOURNAL_PHASE_HASH,
-            "tx_hash": tx_hash,
-            "timestamp": utc_now(),
-        }
-        append_jsonl(journal_path, initial_record)
-        write_json(
-            broadcast_intent_path(journal_path),
-            {**initial_record, "status": JOURNAL_PHASE_HASH},
-        )
-        reconciled = self.reconcile(tx_hash)
-        try:
-            process.wait(timeout=120)
-        except subprocess.TimeoutExpired:
-            # The protocol transaction has already been reconciled. Stop only
-            # the CLI's local waiter; never start another broadcast.
-            process.terminate()
-            process.wait(timeout=30)
-        reader.join(timeout=10)
-        final_record = {
-            **initial_record,
-            "phase": JOURNAL_PHASE_RECONCILED,
-            "finality": reconciled["transaction"].get("lifecycle"),
-            "execution_result": {
-                "successful": reconciled["successful"],
-                "tx_execution_result": reconciled["transaction"].get("tx_execution_result"),
-                "tx_execution_result_name": reconciled["transaction"].get("tx_execution_result_name"),
-            },
-            "cli_exit_code": process.returncode,
-            "cli_output_tail": output[-20:],
-            "timestamp": utc_now(),
-        }
-        append_jsonl(journal_path, final_record)
-        write_json(
-            broadcast_intent_path(journal_path),
-            {**final_record, "status": JOURNAL_PHASE_RECONCILED},
-        )
-        if not reconciled["successful"]:
-            raise QualificationError(f"{label} finalized without successful execution: {final_record}")
-        return tx_hash, final_record
 
 
 def contract_address_from_transaction(rpc: Rpc, tx_hash: str) -> str:
@@ -884,7 +716,6 @@ def main() -> int:
     source = source_and_freeze()
     rpc = Rpc(RPC)
     client = GenLayerClient(studio_devnet)
-    node, cli = find_node_cli()
     state_before = account_state(rpc)
     if state_before["latest_nonce"] != state_before["pending_nonce"]:
         raise QualificationError(f"signer has pending transactions: {state_before}")
@@ -914,7 +745,7 @@ def main() -> int:
         },
     )
 
-    writer = LiveWriter(rpc, client, node, cli)
+    writer = LiveWriter(rpc, client)
     deployment_path = QUALIFICATION_DIR / "deployment.jsonl"
     existing_deployment = load_json(QUALIFICATION_DIR / "deployment-result.json")
     deployment_tx = None

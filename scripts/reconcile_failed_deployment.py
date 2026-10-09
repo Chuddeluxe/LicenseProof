@@ -1,12 +1,12 @@
-"""Reconcile the one emitted deployment hash after CLI output parsing failed."""
+"""Read-only reconciliation of the historical failed deployment hash."""
 
 from __future__ import annotations
 
 import json
 from pathlib import Path
 
+from genlayer_py import create_client
 from genlayer_py.chains.studio_devnet import studio_devnet
-from genlayer_py.client import GenLayerClient
 
 from studio_live_qualification import (
     CHAIN_ID,
@@ -17,7 +17,6 @@ from studio_live_qualification import (
     LiveWriter,
     Rpc,
     append_jsonl,
-    find_node_cli,
     json_safe,
     serialized_deploy,
     utc_now,
@@ -38,9 +37,8 @@ def main() -> int:
     chain_hex, _ = rpc.call("eth_chainId", [])
     if int(chain_hex, 16) != CHAIN_ID:
         raise RuntimeError(f"unexpected chain id while reconciling: {chain_hex}")
-    client = GenLayerClient(studio_devnet)
-    node, cli = find_node_cli()
-    writer = LiveWriter(rpc, client, node, cli)
+    client = create_client(studio_devnet, endpoint=RPC)
+    writer = LiveWriter(rpc, client)
     initial = {
         "phase": "tx_hash_persisted_recovery",
         "label": "DEPLOYMENT",

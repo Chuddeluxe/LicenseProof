@@ -67,6 +67,9 @@ SEMANTIC_FIELDS = (
     "evidence_sufficient",
 )
 TX_HASH_RE = re.compile(r"(?:Transaction Hash|transaction hash):\s*(0x[0-9a-fA-F]{64})")
+JOURNAL_PHASE_STARTED = "broadcast_started"
+JOURNAL_PHASE_HASH = "tx_hash_persisted"
+JOURNAL_PHASE_RECONCILED = "reconciled"
 
 
 class QualificationError(RuntimeError):
@@ -100,6 +103,78 @@ def append_jsonl(path: Path, record: dict[str, Any]) -> None:
         handle.write(line)
         handle.flush()
         os.fsync(handle.fileno())
+
+
+def journal_records(path: Path) -> list[dict[str, Any]]:
+    """Read the durable write journal without changing it."""
+    if not path.exists():
+        return []
+    records: list[dict[str, Any]] = []
+    for raw_line in path.read_text(encoding="utf-8").splitlines():
+        if not raw_line.strip():
+            continue
+        try:
+            record = json.loads(raw_line)
+        except ValueError as exc:
+            raise QualificationError(f"invalid qualification journal line in {path}: {exc}") from exc
+        if not isinstance(record, dict):
+            raise QualificationError(f"qualification journal record is not an object in {path}")
+        records.append(record)
+    return records
+
+
+def unresolved_broadcast_attempt(path: Path) -> dict[str, Any] | None:
+    """Return an attempt that may have reached the network but has no hash.
+
+    This is intentionally conservative.  An unresolved pre-broadcast record is
+    a stop condition, not permission to try again: the process cannot prove
+    that the provider did not accept the request.
+    """
+    active: dict[str, dict[str, Any]] = {}
+    for record in journal_records(path):
+        attempt_id = record.get("attempt_id")
+        if not isinstance(attempt_id, str) or not attempt_id:
+            continue
+        phase = record.get("phase")
+        if phase == JOURNAL_PHASE_STARTED:
+            active[attempt_id] = record
+        elif (
+            phase in {JOURNAL_PHASE_HASH, JOURNAL_PHASE_RECONCILED}
+            and isinstance(record.get("tx_hash"), str)
+            and record.get("tx_hash")
+        ):
+            active.pop(attempt_id, None)
+    if not active:
+        return None
+    return next(iter(active.values()))
+
+
+def new_attempt_id(label: str, method: str, pre_write_nonce: int, calldata_digest: str) -> str:
+    material = f"{label}\n{method}\n{pre_write_nonce}\n{calldata_digest}\n{time.time_ns()}".encode()
+    return hashlib.sha256(material).hexdigest()
+
+
+def broadcast_intent_path(journal_path: Path) -> Path:
+    return journal_path.with_name(journal_path.name + ".intent.json")
+
+
+def unresolved_broadcast_intent(journal_path: Path) -> dict[str, Any] | None:
+    path = broadcast_intent_path(journal_path)
+    if not path.exists():
+        return None
+    try:
+        value = json.loads(path.read_text(encoding="utf-8"))
+    except (OSError, ValueError) as exc:
+        raise QualificationError(f"could not read broadcast intent {path}: {exc}") from exc
+    if not isinstance(value, dict):
+        raise QualificationError(f"broadcast intent is not an object: {path}")
+    if (
+        value.get("status") in {"tx_hash_persisted", "reconciled"}
+        and isinstance(value.get("tx_hash"), str)
+        and value.get("tx_hash")
+    ):
+        return None
+    return value
 
 
 def write_json(path: Path, value: Any) -> None:
@@ -142,7 +217,13 @@ class Rpc:
 def source_and_freeze() -> str:
     status = subprocess.check_output(["git", "status", "--porcelain"], cwd=ROOT, text=True).strip()
     if status:
-        allowed_prefixes = ("evidence/qualification/", "docs/LIVE_", "scripts/studio_live_qualification.py")
+        allowed_prefixes = (
+            "evidence/qualification/",
+            "docs/LIVE_",
+            "scripts/studio_live_qualification.py",
+            "scripts/studio_forensics.py",
+            "tests/harness/",
+        )
         unexpected: list[str] = []
         for line in status.splitlines():
             path = line[3:] if len(line) >= 4 else line
@@ -499,6 +580,20 @@ class LiveWriter:
         fee_result: dict[str, Any],
         deployment: bool = False,
     ) -> tuple[str, dict[str, Any]]:
+        prior_unresolved = unresolved_broadcast_attempt(journal_path)
+        if prior_unresolved is not None:
+            raise QualificationError(
+                "unresolved broadcast attempt is a permanent stop condition; "
+                f"recover attempt_id={prior_unresolved.get('attempt_id')} "
+                f"nonce={prior_unresolved.get('pre_write_nonce')} before resubmitting"
+            )
+        prior_intent = unresolved_broadcast_intent(journal_path)
+        if prior_intent is not None:
+            raise QualificationError(
+                "unresolved broadcast intent is a permanent stop condition; "
+                f"recover attempt_id={prior_intent.get('attempt_id')} "
+                f"nonce={prior_intent.get('pre_write_nonce')} before resubmitting"
+            )
         fee_json = json.dumps(
             {
                 "distribution": fee_result["result"]["defaultFees"]["distribution"],
@@ -538,6 +633,33 @@ class LiveWriter:
                 "--args",
                 *[scalar_arg(value) for value in args],
             ]
+        attempt_id = new_attempt_id(label, method, pre_write_nonce, calldata_digest)
+        started_record = {
+            "phase": JOURNAL_PHASE_STARTED,
+            "attempt_id": attempt_id,
+            "label": label,
+            "method": method,
+            "arguments": args,
+            "from": DEPLOYER,
+            "network": NETWORK,
+            "chainId": CHAIN_ID,
+            "pre_write_nonce": pre_write_nonce,
+            "calldata_sha256": calldata_digest,
+            "fee_estimate": fee_result,
+            "tx_hash": None,
+            "finality": None,
+            "execution_result": None,
+            "canonical_readback": None,
+            "timestamp": utc_now(),
+        }
+        # This record is fsynced before Popen. If Popen or the CLI fails after
+        # the provider accepted the request, a later process must stop rather
+        # than risk a second transaction with the same intended write.
+        append_jsonl(journal_path, started_record)
+        write_json(
+            broadcast_intent_path(journal_path),
+            {**started_record, "status": "broadcast_possible"},
+        )
         process = subprocess.Popen(
             command,
             cwd=ROOT,
@@ -578,23 +700,16 @@ class LiveWriter:
             raise QualificationError(f"{label} produced no transaction hash: {' | '.join(output[-20:])}")
         tx_hash = hash_holder["tx_hash"]
         initial_record = {
-            "phase": "tx_hash_persisted",
-            "label": label,
-            "method": method,
-            "arguments": args,
-            "from": DEPLOYER,
-            "network": NETWORK,
-            "chainId": CHAIN_ID,
-            "pre_write_nonce": pre_write_nonce,
-            "calldata_sha256": calldata_digest,
-            "fee_estimate": fee_result,
+            **started_record,
+            "phase": JOURNAL_PHASE_HASH,
             "tx_hash": tx_hash,
-            "finality": None,
-            "execution_result": None,
-            "canonical_readback": None,
             "timestamp": utc_now(),
         }
         append_jsonl(journal_path, initial_record)
+        write_json(
+            broadcast_intent_path(journal_path),
+            {**initial_record, "status": JOURNAL_PHASE_HASH},
+        )
         reconciled = self.reconcile(tx_hash)
         try:
             process.wait(timeout=120)
@@ -606,7 +721,7 @@ class LiveWriter:
         reader.join(timeout=10)
         final_record = {
             **initial_record,
-            "phase": "reconciled",
+            "phase": JOURNAL_PHASE_RECONCILED,
             "finality": reconciled["transaction"].get("lifecycle"),
             "execution_result": {
                 "successful": reconciled["successful"],
@@ -618,6 +733,10 @@ class LiveWriter:
             "timestamp": utc_now(),
         }
         append_jsonl(journal_path, final_record)
+        write_json(
+            broadcast_intent_path(journal_path),
+            {**final_record, "status": JOURNAL_PHASE_RECONCILED},
+        )
         if not reconciled["successful"]:
             raise QualificationError(f"{label} finalized without successful execution: {final_record}")
         return tx_hash, final_record
@@ -705,17 +824,10 @@ def load_json(path: Path) -> dict[str, Any] | None:
 
 
 def last_journal_transaction(path: Path) -> str | None:
-    if not path.exists():
-        return None
+    records = journal_records(path)
     latest: str | None = None
-    for raw_line in path.read_text(encoding="utf-8").splitlines():
-        if not raw_line.strip():
-            continue
-        try:
-            record = json.loads(raw_line)
-        except ValueError as exc:
-            raise QualificationError(f"invalid qualification journal line in {path}: {exc}") from exc
-        tx_hash = record.get("tx_hash") if isinstance(record, dict) else None
+    for record in records:
+        tx_hash = record.get("tx_hash")
         if isinstance(tx_hash, str) and tx_hash:
             latest = tx_hash
     return latest
@@ -829,6 +941,20 @@ def main() -> int:
                 raise QualificationError(f"existing deployment finalized unsuccessfully: {reconciled}")
             deployment_record = reconciled
         else:
+            unresolved = unresolved_broadcast_attempt(deployment_path)
+            if unresolved is not None:
+                raise QualificationError(
+                    "deployment is blocked by an unresolved prior broadcast; "
+                    f"recover attempt_id={unresolved.get('attempt_id')} "
+                    f"nonce={unresolved.get('pre_write_nonce')} before any new submission"
+                )
+            intent = unresolved_broadcast_intent(deployment_path)
+            if intent is not None:
+                raise QualificationError(
+                    "deployment is blocked by an unresolved durable intent; "
+                    f"recover attempt_id={intent.get('attempt_id')} "
+                    f"nonce={intent.get('pre_write_nonce')} before any new submission"
+                )
             deployment_args: list[Any] = []
             _deployment_data, deployment_digest = serialized_deploy(source)
             deployment_tx, deployment_record = writer.broadcast_once(

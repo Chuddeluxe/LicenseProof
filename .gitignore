@@ -11,3 +11,4 @@ coverage.xml
 reports/
 secrets/
 node_modules/
+.tmp-pytest-forensics/

@@ -1,0 +1,433 @@
+{
+  "ctor": {
+    "kwparams": {},
+    "params": []
+  },
+  "methods": {
+    "add_component": {
+      "kwparams": {},
+      "params": [
+        [
+          "component_id",
+          "string"
+        ],
+        [
+          "manifest_id",
+          "string"
+        ],
+        [
+          "name",
+          "string"
+        ],
+        [
+          "version",
+          "string"
+        ],
+        [
+          "component_type",
+          "string"
+        ],
+        [
+          "source_identifier",
+          "string"
+        ],
+        [
+          "package_hash",
+          "string"
+        ],
+        [
+          "declared_license_id",
+          "string"
+        ],
+        [
+          "license_evidence_id",
+          "string"
+        ]
+      ],
+      "payable": false,
+      "readonly": false,
+      "ret": "null"
+    },
+    "adjudicate_component": {
+      "kwparams": {},
+      "params": [
+        [
+          "manifest_id",
+          "string"
+        ],
+        [
+          "component_id",
+          "string"
+        ]
+      ],
+      "payable": false,
+      "readonly": false,
+      "ret": "string"
+    },
+    "begin_component_review": {
+      "kwparams": {},
+      "params": [
+        [
+          "manifest_id",
+          "string"
+        ],
+        [
+          "component_id",
+          "string"
+        ]
+      ],
+      "payable": false,
+      "readonly": false,
+      "ret": "null"
+    },
+    "commit_license_evidence": {
+      "kwparams": {},
+      "params": [
+        [
+          "evidence_id",
+          "string"
+        ],
+        [
+          "component_id",
+          "string"
+        ],
+        [
+          "authority_id",
+          "string"
+        ],
+        [
+          "authority_host",
+          "string"
+        ],
+        [
+          "authority_path_prefix",
+          "string"
+        ],
+        [
+          "source_url",
+          "string"
+        ],
+        [
+          "content_sha256",
+          "string"
+        ],
+        [
+          "content_byte_length",
+          "int"
+        ],
+        [
+          "published_at",
+          "string"
+        ],
+        [
+          "observed_at",
+          "string"
+        ],
+        [
+          "evidence_type",
+          "string"
+        ]
+      ],
+      "payable": false,
+      "readonly": false,
+      "ret": "null"
+    },
+    "contract_info": {
+      "kwparams": {},
+      "params": [],
+      "readonly": true,
+      "ret": "string"
+    },
+    "create_manifest": {
+      "kwparams": {},
+      "params": [
+        [
+          "manifest_id",
+          "string"
+        ],
+        [
+          "name",
+          "string"
+        ],
+        [
+          "release_version",
+          "string"
+        ],
+        [
+          "policy_id",
+          "string"
+        ],
+        [
+          "supersedes_manifest_id",
+          "string"
+        ]
+      ],
+      "payable": false,
+      "readonly": false,
+      "ret": "null"
+    },
+    "create_release_policy": {
+      "kwparams": {},
+      "params": [
+        [
+          "policy_id",
+          "string"
+        ],
+        [
+          "name",
+          "string"
+        ],
+        [
+          "commercial_use",
+          "bool"
+        ],
+        [
+          "hosted_service",
+          "bool"
+        ],
+        [
+          "redistribution",
+          "bool"
+        ],
+        [
+          "modification",
+          "bool"
+        ],
+        [
+          "sublicensing",
+          "bool"
+        ],
+        [
+          "derivative_distribution",
+          "bool"
+        ],
+        [
+          "source_model",
+          "string"
+        ],
+        [
+          "distribution_model",
+          "string"
+        ],
+        [
+          "policy_version",
+          "string"
+        ]
+      ],
+      "payable": false,
+      "readonly": false,
+      "ret": "null"
+    },
+    "finalize_manifest": {
+      "kwparams": {},
+      "params": [
+        [
+          "manifest_id",
+          "string"
+        ]
+      ],
+      "payable": false,
+      "readonly": false,
+      "ret": "string"
+    },
+    "freeze_manifest": {
+      "kwparams": {},
+      "params": [
+        [
+          "manifest_id",
+          "string"
+        ]
+      ],
+      "payable": false,
+      "readonly": false,
+      "ret": "null"
+    },
+    "freeze_release_policy": {
+      "kwparams": {},
+      "params": [
+        [
+          "policy_id",
+          "string"
+        ]
+      ],
+      "payable": false,
+      "readonly": false,
+      "ret": "null"
+    },
+    "get_audit_events": {
+      "kwparams": {},
+      "params": [],
+      "readonly": true,
+      "ret": [
+        {
+          "$rep": "string"
+        }
+      ]
+    },
+    "get_component": {
+      "kwparams": {},
+      "params": [
+        [
+          "component_id",
+          "string"
+        ]
+      ],
+      "readonly": true,
+      "ret": "string"
+    },
+    "get_component_ids": {
+      "kwparams": {},
+      "params": [
+        [
+          "manifest_id",
+          "string"
+        ]
+      ],
+      "readonly": true,
+      "ret": [
+        {
+          "$rep": "string"
+        }
+      ]
+    },
+    "get_component_review": {
+      "kwparams": {},
+      "params": [
+        [
+          "component_id",
+          "string"
+        ]
+      ],
+      "readonly": true,
+      "ret": "string"
+    },
+    "get_component_review_ids": {
+      "kwparams": {},
+      "params": [
+        [
+          "manifest_id",
+          "string"
+        ]
+      ],
+      "readonly": true,
+      "ret": [
+        {
+          "$rep": "string"
+        }
+      ]
+    },
+    "get_evidence": {
+      "kwparams": {},
+      "params": [
+        [
+          "evidence_id",
+          "string"
+        ]
+      ],
+      "readonly": true,
+      "ret": "string"
+    },
+    "get_evidence_ids": {
+      "kwparams": {},
+      "params": [
+        [
+          "component_id",
+          "string"
+        ]
+      ],
+      "readonly": true,
+      "ret": [
+        {
+          "$rep": "string"
+        }
+      ]
+    },
+    "get_manifest": {
+      "kwparams": {},
+      "params": [
+        [
+          "manifest_id",
+          "string"
+        ]
+      ],
+      "readonly": true,
+      "ret": "string"
+    },
+    "get_manifest_count": {
+      "kwparams": {},
+      "params": [],
+      "readonly": true,
+      "ret": "int"
+    },
+    "get_manifest_ids": {
+      "kwparams": {},
+      "params": [],
+      "readonly": true,
+      "ret": [
+        {
+          "$rep": "string"
+        }
+      ]
+    },
+    "get_manifest_result": {
+      "kwparams": {},
+      "params": [
+        [
+          "manifest_id",
+          "string"
+        ]
+      ],
+      "readonly": true,
+      "ret": "string"
+    },
+    "get_policy": {
+      "kwparams": {},
+      "params": [
+        [
+          "policy_id",
+          "string"
+        ]
+      ],
+      "readonly": true,
+      "ret": "string"
+    },
+    "get_policy_count": {
+      "kwparams": {},
+      "params": [],
+      "readonly": true,
+      "ret": "int"
+    },
+    "get_policy_ids": {
+      "kwparams": {},
+      "params": [],
+      "readonly": true,
+      "ret": [
+        {
+          "$rep": "string"
+        }
+      ]
+    },
+    "get_status": {
+      "kwparams": {},
+      "params": [],
+      "readonly": true,
+      "ret": "string"
+    },
+    "supersede_manifest": {
+      "kwparams": {},
+      "params": [
+        [
+          "manifest_id",
+          "string"
+        ],
+        [
+          "replacement_manifest_id",
+          "string"
+        ]
+      ],
+      "payable": false,
+      "readonly": false,
+      "ret": "null"
+    }
+  }
+}

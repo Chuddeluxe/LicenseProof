@@ -1,0 +1,4 @@
+Commercial hosted use is permitted. Modification and redistribution are
+permitted, but a network service that exposes the covered functionality must
+provide the complete corresponding source code for the covered derivative.
+Attribution and notice preservation are required.

@@ -1,0 +1,4 @@
+STARTING_STATE=Empty directory; no unrelated project or meaningful existing work detected.
+STARTING_HEAD=NONE (git repository did not exist at inspection time)
+WORKTREE_STATUS=Empty directory before git initialization.
+INSPECTED=2026-10-09 Africa/Lagos

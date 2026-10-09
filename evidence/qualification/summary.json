@@ -1,0 +1,63 @@
+{
+  "network": "studio-dev",
+  "chainId": 61997,
+  "rpc": "https://studio-dev.genlayer.com/api",
+  "contract": "contracts/LicenseProof.py",
+  "contractSha256": "77fb66904787baab72210276f29d6c0cc29831e2d243cecad5c2eb249146c0c4",
+  "runner": "py-genlayer:5jycge4q8k23462jtb0b9fyey1s9qz928sz2nbrd9mg4sxqg2qng",
+  "deployer": "0x33653e6e86807e41682d3346cdf648d6653384b1",
+  "deployment": {
+    "attemptsObservedOrInferred": 2,
+    "capturedTx": "0xc1d73935470d50f78338aea2fe4c151f1d4baffd98f60575a5c95fb59c99a799",
+    "capturedNonce": 12,
+    "finality": {"state": "finalized", "outcome": "accepted"},
+    "execution": "ERROR / FINISHED_WITH_ERROR",
+    "error": "out_of receipt nondet_output; validator quorum reached",
+    "observedContractAddress": "0x665F21cD9c8e0d12aAa2773840293152CBEC7C54",
+    "usableContract": false,
+    "uncapturedNonce": 11,
+    "uncapturedHash": null
+  },
+  "preflight": {
+    "remoteSourceSchemaMethods": 26,
+    "remoteSourceSchemaParity": "PASS",
+    "genCallDeploy": "PASS",
+    "feeValue": "76548000002588",
+    "leaderTimeunitsAllocation": "100",
+    "validatorTimeunitsAllocation": "200",
+    "executionBudgetPerRound": "76548000000000",
+    "totalMessageFees": "0",
+    "appealRounds": "0",
+    "rotations": ["0"]
+  },
+  "spdx": {
+    "commit": "31ba1a50e5397e00a304dbadc76531740e89ee48",
+    "authorityHost": "raw.githubusercontent.com",
+    "authorityPathPrefix": "/spdx/license-list-data/31ba1a50e5397e00a304dbadc76531740e89ee48/text/",
+    "licenses": {
+      "MIT": {"sha256": "b05785f9f18e6716bab63424b11454513b9943a222595b70411009202fc592b5", "bytes": 1078},
+      "Elastic-2.0": {"sha256": "6448026f2e06ab3da9ed8ddda686694bba37179e88db92dea6d4aab516c957ea", "bytes": 3802},
+      "AGPL-3.0-only": {"sha256": "d8a6cc31abc16b6748c7a21f21611f5a1ec33f67d22ca23d7da1c19b95496bee", "bytes": 34020}
+    }
+  },
+  "policy": null,
+  "cases": {"A": null, "B": null, "C": null},
+  "qualificationWrites": 0,
+  "allQualificationTxHashesPersisted": true,
+  "blindRebroadcasts": "No intentional retry; one earlier deployment hash is unreconciled after CLI parser failure",
+  "resultShopping": false,
+  "unexplainedWrites": "One inferred nonce-11 deployment transaction hash is unavailable",
+  "tests": {"pytest": "53 passed", "mutants": "24/24 killed", "schemaParity": "PASS", "secretScan": "PASS"},
+  "liveQualification": "NOT VERIFIED",
+  "readyForPublicRelease": "NO",
+  "blockers": [
+    "Deployment finalized with execution error: out_of receipt nondet_output",
+    "One inferred nonce-11 deployment transaction is not recoverable by the exposed RPC history",
+    "No deployed contract readback or live case qualification exists"
+  ],
+  "deploymentPerformed": "ATTEMPTED; no successful deployment",
+  "transactionBroadcast": "YES",
+  "faucetUsed": "NO",
+  "githubCreated": "NO",
+  "pushPerformed": "NO"
+}

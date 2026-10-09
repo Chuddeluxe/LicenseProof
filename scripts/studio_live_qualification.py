@@ -556,7 +556,8 @@ class LiveWriter:
             assert process.stdout is not None
             for line in process.stdout:
                 output.append(line.rstrip())
-                match = TX_HASH_RE.search(line)
+                # The RC CLI may print the label and hash on separate lines.
+                match = TX_HASH_RE.search("\n".join(output))
                 if match and "tx_hash" not in hash_holder:
                     hash_holder["tx_hash"] = match.group(1)
                     hash_event.set()

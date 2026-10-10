@@ -51,7 +51,9 @@ def main() -> int:
     print("REMOTE_SCHEMA_METHODS=28")
     print("REMOTE_SCHEMA_PARITY=PASS")
     print("REMOTE_GEN_CALL_DEPLOY=PASS")
-    print("REMOTE_PREFLIGHT_SOURCE_SHA=" + digest)\n    print("RAW_WORKTREE_SOURCE_SHA=" + raw_digest)\n    print("WORKTREE_LINE_ENDING_NORMALIZED=" + ("YES" if raw_digest != digest else "NO"))
+    print("REMOTE_PREFLIGHT_SOURCE_SHA=" + digest)
+    print("RAW_WORKTREE_SOURCE_SHA=" + raw_digest)
+    print("WORKTREE_LINE_ENDING_NORMALIZED=" + ("YES" if raw_digest != digest else "NO"))
     print("TRANSACTION_BROADCAST=NO")
     print("NOTE=gen_call validates source execution but does not prove live receipt budget sufficiency")
     return 0

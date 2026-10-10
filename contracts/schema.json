@@ -276,7 +276,6 @@
           "int"
         ]
       ],
-      "payable": false,
       "readonly": true,
       "ret": [
         {
@@ -408,7 +407,6 @@
           "string"
         ]
       ],
-      "payable": false,
       "readonly": true,
       "ret": "string"
     },

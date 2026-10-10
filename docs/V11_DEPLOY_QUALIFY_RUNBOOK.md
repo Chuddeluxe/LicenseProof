@@ -1,6 +1,6 @@
 # LicenseProof v1.1 — controlled deployment and qualification handoff
 
-**Status:** PREDEPLOYMENT CANDIDATE. NOT YET DEPLOYED OR SUBMITTED. Historical `v1.0.0` is still deployed at `0x27Ca7E9F92AB0e465420AA9F2583fB25c9355619`, but no v1.1 address or business verdict may be inferred from that release.
+**Status:** EXECUTED AND QUALIFIED ON STUDIO-DEV. Historical `v1.0.0` remains preserved at `0x27Ca7E9F92AB0e465420AA9F2583fB25c9355619`; v1.1 has separate deployment and qualification evidence. No GenLayer Portal submission is claimed without authenticated Portal confirmation.
 
 ## Exact candidate identity
 
@@ -39,6 +39,13 @@ python -m scripts.live_qualification_v11 --execute
 Remove-Item Env:\LICENSEPROOF_V11_DEPLOY_APPROVAL
 ```
 
+The authorized execution was completed once. Deployment transaction
+`0x0d81881d71a362033fa075780d6b6b5ea90c20251fcce952772f863561db5ca1`
+finalized successfully at nonce 42 and created
+`0x18A850BB8cA6cb0F75a5A9ab95362c12f1E349e6`. The exact source, schema, and
+contract-info readbacks are recorded in `docs/LIVE_DEPLOYMENT_V11.md` and
+`evidence/qualification/v1.1/`.
+
 Do not run these approval commands until fresh nonce, balance, signer, source/hash, remote schema, fee distribution, process exclusivity, and intent journal checks pass. The account is shared with other projects: avoid concurrent signed sends from any of them.
 
 ## What the guarded runner does
@@ -47,7 +54,7 @@ Do not run these approval commands until fresh nonce, balance, signer, source/ha
 2. Stops on a consumed nonce without recoverable hash, on contradictory account state, on a terminal failed execution, or on readback mismatch. **Never rebroadcast just because stdout, RPC, or the process timed out.**
 3. Verifies finalized **successful execution**, deployed source SHA, remote 28-method ABI, and `contract_info` version/schema independently.
 4. Pins SPDX upstream license *template* bytes to a specific commit with exact SHA-256 and length, never treating them as proof of real package-license grants.
-5. Runs controlled MIT, Elastic-2.0, and AGPL-3.0-only policy-relative examples using the new 17-boolean schema, explicitly expecting conservative `INCONCLUSIVE` where license application facts are not established.
+5. Runs controlled MIT, Elastic-2.0, and AGPL-3.0-only policy-relative examples using the new 17-boolean schema, explicitly expecting conservative `INCONCLUSIVE` where license application facts are not established. The completed v1.1 outcomes are MIT `COMPATIBLE_WITH_OBLIGATIONS`, Elastic-2.0 `INCOMPATIBLE`, and AGPL-3.0-only `INCONCLUSIVE`.
 6. Preserves every hash, receipt, canonical review, replay/read-only immutability proof, and failed attempt in `evidence/qualification/v1.1/`.
 7. Fails qualification rather than proclaiming `VERIFIED` when the sender nonce window contains unexplained transactions.
 
@@ -57,10 +64,10 @@ An unsuccessful semantic transaction with a known hash must be reconciled. The r
 
 The contract assesses **creator-claimed license-text bytes against a creator-declared release policy**. It proves neither legal title nor a package publisher's grant, independent upstream currentness, trusted effective HTTP redirect origin when runtime metadata is absent, nor complete cross-component compatibility. V1.1 positive individual component decisions do not certify full software bundles; multi-component otherwise-positive manifest results fail closed to `INCONCLUSIVE`.
 
-The earlier v1.0.0 results and CI may be cited as **historical**, but never relabeled as v1.1 qualifications.
+The earlier v1.0.0 results and CI may be cited as **historical**, but never relabeled as v1.1 qualifications. The v1.1 qualification used 25 transactions over nonces 42–66: 24 successful transactions and one terminal technical semantic failure at nonce 57, followed by the single authorized same-identity retry at nonce 58. The final nonce is 67/67 and all nonces are explained.
 
 ## Public release and submission gate
 
-Only after successful v1.1 deployment and new live qualification: commit the receipts and truthful readbacks, verify local and GitHub source parity, all CI/tests/mutations/secret scans, exact-HEAD `main` and protected merge, publish `v1.1.0`, then prepare GenLayer Portal fields containing the **new** contract address and actual proof. The Portal submission is not complete until it returns authenticated submission confirmation.
+After successful v1.1 deployment and new live qualification, commit the receipts and truthful readbacks, verify local and GitHub source parity, all CI/tests/mutations/secret scans, exact-HEAD `main` and protected merge, and publish `v1.1.0`. The completed release evidence is versioned in `docs/LIVE_DEPLOYMENT_V11.md`, `docs/LIVE_QUALIFICATION_V11.md`, and `evidence/qualification/v1.1/`. Prepare GenLayer Portal fields containing the **new** contract address and actual proof only; the Portal submission is not complete until it returns authenticated submission confirmation.
 
 This document is not an approval or submission receipt. **The guarded `--execute` command broadcasts paid chain transactions if its separate authorization condition is satisfied**; never run it merely for testing or inspection.

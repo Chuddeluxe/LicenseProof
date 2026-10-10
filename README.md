@@ -2,7 +2,7 @@
 
 Consensus-backed, policy-relative classification of committed software license text before release.
 
-> **Release status:** v1.0.0 is the historical deployed demonstration. The `hardening/licenseproof-v1-1` branch is an **unreleased candidate**. No v1.1 Studio-dev deployment or live qualification is claimed.
+> **Release status:** v1.1.0 is the current Studio-dev release. v1.0.0 remains preserved as the historical deployed release and is not rewritten.
 
 LicenseProof is a standalone GenLayer intelligent contract that evaluates
 whether a frozen component manifest is compatible with a frozen release policy
@@ -63,11 +63,13 @@ attribution_required
 notice_preservation_required
 network_source_disclosure_required
 field_of_use_restriction
+field_of_use_conflicts_with_declared_use
 patent_condition_present
 evidence_sufficient
+applicability_clear
 ```
 
-The deployed v1.0.0 uses exactly these fifteen booleans. The v1.1 candidate adds `applicability_clear` and `field_of_use_conflicts_with_declared_use` (17 strict boolean fields total): conditional license facts without established applicability produce `INCONCLUSIVE`, and merely having a field-of-use restriction is not an automatic release conflict. Every field is a strict boolean; the JSON object contains exactly the keys required by the relevant version. License text is treated as untrusted data; prompt,
+The deployed v1.0.0 uses the first fifteen booleans. v1.1 uses all seventeen: conditional license facts without established applicability produce `INCONCLUSIVE`, and merely having a field-of-use restriction is not an automatic release conflict. Every field is a strict boolean; the JSON object contains exactly the keys required by the relevant version. License text is treated as untrusted data; prompt,
 role, JSON, contract-call, payment, validator, tool, and document-authority
 instructions inside it are ignored.
 
@@ -104,7 +106,54 @@ INSUFFICIENT_EVIDENCE
 INCONCLUSIVE
 ```
 
-The deployed v1.0.0 has 26 public methods. The v1.1 candidate has 28 methods, including a successor lineage view and paginated audit events, and extends the semantic vector with `applicability_clear`. The unreleased v1.1 candidate is NOT the deployed contract.
+The v1.0.0 contract has 26 public methods. The v1.1.0 contract has 28 methods, including permissionless frozen-manifest review support, successor lineage, and paginated audit events.
+
+## Verified v1.1.0 Studio-dev deployment
+
+The current release is deployed on Studio-dev, chain `61997`:
+
+```text
+Contract:        0x18A850BB8cA6cb0F75a5A9ab95362c12f1E349e6
+Deployment tx:   0x0d81881d71a362033fa075780d6b6b5ea90c20251fcce952772f863561db5ca1
+Source SHA-256:  354f840a54e57a215790fa70182938ade78f43b505bcf05f8ded37cd4c1135fd
+Version:         1.1.0
+Semantic schema: licenseproof.semantic.v1.1
+Runner:          py-genlayer:5jycge4q8k23462jtb0b9fyey1s9qz928sz2nbrd9mg4sxqg2qng
+Methods:         28
+Execution:       FINALIZED / SUCCESS
+Source parity:   PASS
+Schema parity:   PASS
+```
+
+The deployment used the proven Studio-dev profile: execution budget
+`25000000000000000`, rotations `[3]`, and fee value `100000000000010352`.
+The durable direct-SDK sender fsynced its intent before broadcast, persisted the
+returned hash immediately, and reconciled that same hash. Exactly one deployment
+was broadcast.
+
+## Verified v1.1.0 live qualification
+
+The v1.1 live qualification used SPDX `license-list-data` commit
+`31ba1a50e5397e00a304dbadc76531740e89ee48`, with exact authenticated bytes:
+
+| Case | Evidence SHA-256 | Canonical review | Result |
+| --- | --- | --- | --- |
+| MIT | `b05785f9f18e6716bab63424b11454513b9943a222595b70411009202fc592b5` | `c75a083826ab8d28ac3358ecf7a7e6f4d10b071a8b923baa0ee8c156bc4c3b21` | `COMPATIBLE_WITH_OBLIGATIONS` |
+| Elastic-2.0 | `6448026f2e06ab3da9ed8ddda686694bba37179e88db92dea6d4aab516c957ea` | `18548d2f1b3a67fb5857db757337effacdb6307713bf3d8648accf319084b004` | `INCOMPATIBLE` |
+| AGPL-3.0-only | `d8a6cc31abc16b6748c7a21f21611f5a1ec33f67d22ca23d7da1c19b95496bee` | `e7cdff6841629a84efac55ea7ee6a1ef45ea375a8637cbd2cca3db2ddefb3e66` | `INCONCLUSIVE` |
+
+Case A recognized hosted commercial use with attribution and notice obligations.
+Case B recognized the hosted-service restriction as applicable and incompatible.
+Case C recognized a network-source obligation, but its applicability was not
+established by the bounded evidence, so v1.1 correctly failed closed to
+`INCONCLUSIVE` rather than asserting a business incompatibility.
+
+Case B had one terminal technical consensus failure at
+`0x06395c669605f5140fbb158ec4c05b28ff26a59af38e27906f6500b6c1238efe`.
+The canonical review was absent, the frozen identity was unchanged, and the
+single authorized retry succeeded at
+`0x3f209f2369a6dc783ff32d3003742d4fe2e72054cada73a61913a9538b1865e1`.
+No result shopping occurred.
 
 ## Verified historical v1.0.0 Studio-dev deployment
 
@@ -197,5 +246,7 @@ python scripts/verify_source.py
 
 ## Repository status
 
-This branch is a steward-hardening **candidate**, not a deployed successor. Do not claim a v1.1 Studio-dev contract address or use the historical v1.0.0 proof as evidence of v1.1 execution.
+v1.1.0 is the hardened successor release. Its proof is separate from the
+historical v1.0.0 deployment and qualification. A GenLayer Portal submission
+is not claimed here without authenticated Portal confirmation.
 

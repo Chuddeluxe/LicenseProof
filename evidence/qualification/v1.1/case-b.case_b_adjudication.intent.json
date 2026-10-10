@@ -1,0 +1,46 @@
+{
+  "arguments": [
+    "LP-V11-B-20261010T104217Z",
+    "licenseproof-case-b"
+  ],
+  "broadcast_count": 1,
+  "chainId": 61997,
+  "consensus_calldata_sha256": "085bb3570a421c78734c5c9fe5879de98c948c46058fd0d3029e5eca87710a6d",
+  "contract_address": null,
+  "evm_tx_hash": "0x06395c669605f5140fbb158ec4c05b28ff26a59af38e27906f6500b6c1238efe",
+  "execution_result": null,
+  "feeValue": 100000000000010352,
+  "fee_distribution": {
+    "appealRounds": 0,
+    "executionBudgetPerRound": 25000000000000000,
+    "executionConsumed": 0,
+    "leaderTimeunitsAllocation": 100,
+    "maxPriceGenPerTimeUnit": 2,
+    "receiptFeeMaxGasPrice": 300000000,
+    "rotations": [
+      3
+    ],
+    "storageFeeMaxGasPrice": 300000000,
+    "totalMessageFees": 0,
+    "validatorTimeunitsAllocation": 200
+  },
+  "finality": {
+    "outcome": "undetermined",
+    "state": "finalized"
+  },
+  "from": "0x33653E6e86807e41682D3346CDf648D6653384B1",
+  "label": "CASE_B_ADJUDICATION",
+  "method": "adjudicate_component",
+  "network": "studio-dev",
+  "pre_write_nonce": 57,
+  "predicted_evm_tx_hash": "0x06395c669605f5140fbb158ec4c05b28ff26a59af38e27906f6500b6c1238efe",
+  "protocol_tx_hash": "0x06395c669605f5140fbb158ec4c05b28ff26a59af38e27906f6500b6c1238efe",
+  "raw_transaction_sha256": "89812b74e65ead2f2ab2dd9838576a1fc5ab6900d696e8b4b6578362181b63b5",
+  "serialized_deploy_sha256": "db58c22d0167f0b07c57fe7ea6840f53073d1e0ae028b19fa6a3d58b9a63b496",
+  "source_sha256": "354f840a54e57a215790fa70182938ade78f43b505bcf05f8ded37cd4c1135fd",
+  "status": "reconciled",
+  "successful": false,
+  "timestamp": "2026-10-10T10:59:16.515864Z",
+  "to": "0x18A850BB8cA6cb0F75a5A9ab95362c12f1E349e6",
+  "value": 0
+}

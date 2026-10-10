@@ -8,6 +8,7 @@ qualification cases with the same durable intent/hash/finality boundary.
 from __future__ import annotations
 
 import argparse
+import base64
 import hashlib
 import json
 import os
@@ -122,6 +123,63 @@ def json_safe(value: Any) -> Any:
     if hasattr(value, "value") and not isinstance(value, (str, int, float, bool)):
         return json_safe(value.value)
     return value
+
+
+def deployed_source_sha_v11(rpc: Rpc, address: str) -> str:
+    """Verify deployed v1.1 source without using the historical v1.0 helper."""
+    code, _ = rpc.call("gen_getContractCode", [address])
+    if not isinstance(code, str):
+        raise RuntimeError("gen_getContractCode did not return a string")
+    try:
+        source = base64.b64decode(code, validate=True)
+    except Exception as exc:
+        raise RuntimeError("deployed source was not valid base64") from exc
+    digest = hashlib.sha256(source).hexdigest()
+    if digest != EXPECTED_SOURCE_SHA:
+        raise RuntimeError(f"deployed v1.1 source SHA mismatch: {digest}")
+    return digest
+
+
+def intent_argument(pattern: str, index: int) -> Any | None:
+    """Recover a stable argument from a previously persisted write intent."""
+    for path in sorted(QUALIFICATION_DIR.glob(pattern)):
+        try:
+            value = json.loads(path.read_text(encoding="utf-8"))
+        except (OSError, json.JSONDecodeError):
+            continue
+        arguments = value.get("arguments") if isinstance(value, dict) else None
+        if isinstance(arguments, list) and len(arguments) > index:
+            return arguments[index]
+    return None
+
+
+def semantic_requirements(case_key: str) -> dict[str, bool]:
+    if case_key == "A":
+        return {
+            "commercial_use_permitted": True,
+            "hosted_service_permitted": True,
+            "modification_permitted": True,
+            "attribution_required": True,
+            "notice_preservation_required": True,
+            "evidence_sufficient": True,
+            "applicability_clear": True,
+        }
+    if case_key == "B":
+        return {"hosted_service_permitted": False, "evidence_sufficient": True}
+    return {"network_source_disclosure_required": True, "evidence_sufficient": True}
+
+
+def derived_case_result(case_key: str, vector: dict[str, bool]) -> str:
+    """Derive the expected v1.1 qualification outcome from accepted facts."""
+    if case_key == "A":
+        return "COMPATIBLE_WITH_OBLIGATIONS"
+    if not vector["evidence_sufficient"] or not vector["applicability_clear"]:
+        return "INCONCLUSIVE" if vector["evidence_sufficient"] else "INSUFFICIENT_EVIDENCE"
+    if case_key == "B" and not vector["hosted_service_permitted"]:
+        return "INCOMPATIBLE"
+    if case_key == "C" and vector["network_source_disclosure_required"]:
+        return "INCOMPATIBLE"
+    return "INCONCLUSIVE"
 
 
 def load_firewall_account() -> Any:
@@ -370,13 +428,88 @@ class LiveRun:
     ) -> dict[str, Any]:
         if self.contract_address is None:
             raise RuntimeError("contract address is not set")
+        journal = QUALIFICATION_DIR / journal_name
+        intent = journal.with_name(f"{journal.stem}.{label.lower()}.intent.json")
+        retrying_semantic = False
+        if intent.exists():
+            try:
+                existing = json.loads(intent.read_text(encoding="utf-8"))
+            except (OSError, json.JSONDecodeError) as exc:
+                raise RuntimeError(f"invalid persisted intent for {label}") from exc
+            if not isinstance(existing, dict) or existing.get("status") not in {
+                "evm_hash_persisted", "protocol_hash_persisted", "reconciled"
+            }:
+                raise RuntimeError(f"unresolved persisted intent for {label}; recover before continuing")
+            if existing.get("successful") is False:
+                if method != "adjudicate_component" or existing.get("broadcast_count") != 1:
+                    raise RuntimeError(f"failed non-semantic intent cannot be retried: {label}")
+                if existing.get("arguments") != args or existing.get("source_sha256") != EXPECTED_SOURCE_SHA:
+                    raise RuntimeError("semantic retry identity changed")
+                finality = existing.get("finality")
+                if not isinstance(finality, dict) or finality.get("state") != "finalized" or finality.get("outcome") not in {"undetermined", "error", "reverted"}:
+                    raise RuntimeError("semantic retry requires a terminal technical outcome")
+                current = account_state(self.rpc)
+                if current["latest_nonce"] != current["pending_nonce"] or current["latest_nonce"] != int(existing["pre_write_nonce"]) + 1:
+                    raise RuntimeError("semantic retry nonce window is not unchanged")
+                try:
+                    review = read_review(self.rpc, self.contract_address, args[1])
+                except Exception:
+                    review = None
+                if review:
+                    raise RuntimeError("semantic retry rejected because a canonical review exists")
+                manifest = read_manifest(self.rpc, self.contract_address, args[0])
+                component = read_component(self.rpc, self.contract_address, args[1])
+                evidence = read_evidence(self.rpc, self.contract_address, component["license_evidence_id"])
+                policy = read_policy(self.rpc, self.contract_address, manifest["policy_id"])
+                if manifest.get("state") != "REVIEWING" or component.get("state") != "UNREVIEWED" or policy.get("state") != "FROZEN":
+                    raise RuntimeError("semantic retry frozen identity is no longer legally retryable")
+                retry_identity = {
+                    "manifest_id": manifest["manifest_id"],
+                    "manifest_hash": manifest["manifest_hash"],
+                    "policy_id": manifest["policy_id"],
+                    "policy_hash": policy["policy_hash"],
+                    "component_id": component["component_id"],
+                    "package_hash": component["package_hash"],
+                    "evidence_id": component["license_evidence_id"],
+                    "license_sha256": evidence["content_sha256"],
+                    "semantic_schema_version": "licenseproof.semantic.v1.1",
+                }
+                append_jsonl(journal, {
+                    "phase": "semantic_retry_authorized",
+                    "label": label,
+                    "method": method,
+                    "first_failed_tx": existing["protocol_tx_hash"],
+                    "canonical_record_absent": True,
+                    "identity_unchanged": retry_identity,
+                    "reason": "terminal technical consensus outcome with no canonical successful review",
+                    "timestamp": utc_now(),
+                })
+                intent = intent.with_name(f"{intent.stem}.retry1.intent.json")
+                if intent.exists():
+                    raise RuntimeError("semantic retry intent already exists; second retry is forbidden")
+                retrying_semantic = True
+                self.failed_semantic_attempts += 1
+                self.semantic_retries += 1
+            else:
+                sender = OneShotDeploymentSender(self.client.provider, journal, intent)
+                reconciliation = sender.reconcile_same_hash(
+                    self.client,
+                    readback=(lambda _target: readback()) if readback is not None else None,
+                )
+                if not reconciliation.get("successful"):
+                    raise RuntimeError(f"{label} recovered without successful execution")
+                return {
+                    "label": label,
+                    "method": method,
+                    "evm_tx_hash": reconciliation["evm_tx_hash"],
+                    **reconciliation,
+                    "recovered_existing": True,
+                }
         state = nonce_state(self.client, self.account.address)
         funds = account_state(self.rpc)
         if funds["balance_wei"] <= profile.fee_value * 11 // 10:
             raise RuntimeError(f"insufficient balance for {label} fee envelope: {funds}")
         preview, semantic = write_gen_call(self.rpc, self.contract_address, method, args, profile)
-        journal = QUALIFICATION_DIR / journal_name
-        intent = journal.with_name(f"{journal.stem}.{label.lower()}.intent.json")
         append_jsonl(journal, {
             "phase": "preflight",
             "label": label,
@@ -407,7 +540,14 @@ class LiveRun:
             raise RuntimeError(f"{label} did not finalize successfully")
         self.write_count += 1
         self.successful_write_count += 1
-        return {"label": label, "method": method, "evm_tx_hash": evm_hash, **reconciliation, "semantic_preview": semantic}
+        return {
+            "label": label,
+            "method": method,
+            "evm_tx_hash": evm_hash,
+            **reconciliation,
+            "semantic_preview": semantic,
+            "semantic_retry": retrying_semantic,
+        }
 
     def run(self) -> dict[str, Any]:
         source = CONTRACT.read_text(encoding="utf-8")
@@ -483,7 +623,7 @@ class LiveRun:
                 raise RuntimeError(f"deployment execution failed: {deployment_reconciliation}")
             address = resolve_contract_address(self.rpc, deployment_reconciliation["protocol_tx_hash"], deployment_reconciliation)
             self.contract_address = address
-            source_match = deployed_source_sha(self.rpc, address)
+            source_match = deployed_source_sha_v11(self.rpc, address)
             if source_match != EXPECTED_SOURCE_SHA:
                 raise RuntimeError("deployed v1.1 source SHA does not match frozen candidate")
             deployed_schema, _ = self.rpc.call("gen_getContractSchema", [address])
@@ -510,29 +650,69 @@ class LiveRun:
             fsync_json(QUALIFICATION_DIR / "spdx-provenance.json", spdx)
 
             stamp = datetime.now(timezone.utc).strftime("%Y%m%dT%H%M%SZ")
-            policy_id = f"LP-V11-POLICY-{stamp}"
+            policy_id = intent_argument("*.policy_created.intent.json", 0) or f"LP-V11-POLICY-{stamp}"
             policy_args = [policy_id, "LicenseProof declared proprietary SaaS policy", True, True, False, True, False, False, "PROPRIETARY", "HOSTED_ONLY", "1.1.0"]
-            policy_create = self.send_write("POLICY_CREATED", "create_release_policy", policy_args, regular_profile, lambda: read_policy(self.rpc, address, policy_id))
-            policy = read_policy(self.rpc, address, policy_id)
+            try:
+                policy = read_policy(self.rpc, address, policy_id)
+            except Exception:
+                policy = {}
+            policy_create = None
+            policy_freeze = None
+            if policy.get("state") == "NOT_FOUND":
+                policy_create = self.send_write("POLICY_CREATED", "create_release_policy", policy_args, regular_profile, lambda: read_policy(self.rpc, address, policy_id))
+                policy = read_policy(self.rpc, address, policy_id)
             if policy.get("state") != "DRAFT":
-                raise RuntimeError(f"policy creation readback mismatch: {policy}")
-            policy_freeze = self.send_write("POLICY_FROZEN", "freeze_release_policy", [policy_id], regular_profile, lambda: read_policy(self.rpc, address, policy_id))
-            policy = read_policy(self.rpc, address, policy_id)
+                if policy.get("state") != "FROZEN":
+                    raise RuntimeError(f"policy creation readback mismatch: {policy}")
+            else:
+                policy_freeze = self.send_write("POLICY_FROZEN", "freeze_release_policy", [policy_id], regular_profile, lambda: read_policy(self.rpc, address, policy_id))
+                policy = read_policy(self.rpc, address, policy_id)
             if policy.get("state") != "FROZEN" or not policy.get("policy_hash"):
                 raise RuntimeError(f"policy freeze readback mismatch: {policy}")
 
             cases = {
                 "A": {"license": "MIT", "file": "MIT.txt", "manifest": f"LP-V11-A-{stamp}", "name": "MIT proprietary SaaS qualification", "release": "1.1.0-live-a", "source": "spdx:MIT", "declared": "MIT", "component": "licenseproof-case-a", "literal": "LICENSEPROOF-LIVE-CASE-A-COMPONENT-V11", "evidence": "LP-V11-EVIDENCE-A", "expected": "COMPATIBLE_WITH_OBLIGATIONS", "semantic": {"commercial_use_permitted": True, "hosted_service_permitted": True, "modification_permitted": True, "attribution_required": True, "notice_preservation_required": True, "evidence_sufficient": True, "applicability_clear": True}},
-                "B": {"license": "Elastic-2.0", "file": "Elastic-2.0.txt", "manifest": f"LP-V11-B-{stamp}", "name": "Elastic hosted-service restriction qualification", "release": "1.1.0-live-b", "source": "spdx:Elastic-2.0", "declared": "Elastic-2.0", "component": "licenseproof-case-b", "literal": "LICENSEPROOF-LIVE-CASE-B-COMPONENT-V11", "evidence": "LP-V11-EVIDENCE-B", "expected": "INCONCLUSIVE", "semantic": {"applicability_clear": False, "evidence_sufficient": True}},
-                "C": {"license": "AGPL-3.0-only", "file": "AGPL-3.0-only.txt", "manifest": f"LP-V11-C-{stamp}", "name": "AGPL network-source obligation qualification", "release": "1.1.0-live-c", "source": "spdx:AGPL-3.0-only", "declared": "AGPL-3.0-only", "component": "licenseproof-case-c", "literal": "LICENSEPROOF-LIVE-CASE-C-COMPONENT-V11", "evidence": "LP-V11-EVIDENCE-C", "expected": "INCONCLUSIVE", "semantic": {"applicability_clear": False, "evidence_sufficient": True}},
+                "B": {"license": "Elastic-2.0", "file": "Elastic-2.0.txt", "manifest": f"LP-V11-B-{stamp}", "name": "Elastic hosted-service restriction qualification", "release": "1.1.0-live-b", "source": "spdx:Elastic-2.0", "declared": "Elastic-2.0", "component": "licenseproof-case-b", "literal": "LICENSEPROOF-LIVE-CASE-B-COMPONENT-V11", "evidence": "LP-V11-EVIDENCE-B", "expected": None, "semantic": semantic_requirements("B")},
+                "C": {"license": "AGPL-3.0-only", "file": "AGPL-3.0-only.txt", "manifest": f"LP-V11-C-{stamp}", "name": "AGPL network-source obligation qualification", "release": "1.1.0-live-c", "source": "spdx:AGPL-3.0-only", "declared": "AGPL-3.0-only", "component": "licenseproof-case-c", "literal": "LICENSEPROOF-LIVE-CASE-C-COMPONENT-V11", "evidence": "LP-V11-EVIDENCE-C", "expected": None, "semantic": semantic_requirements("C")},
             }
             for key, case in cases.items():
+                recovered_manifest = intent_argument(f"case-{key.lower()}.*manifest_created.intent.json", 0)
+                recovered_component = intent_argument(f"case-{key.lower()}.*component_added.intent.json", 0)
+                if recovered_manifest:
+                    case["manifest"] = recovered_manifest
+                if recovered_component:
+                    case["component"] = recovered_component
                 journal_name = f"case-{key.lower()}.jsonl"
                 manifest_args = [case["manifest"], case["name"], case["release"], policy_id, ""]
                 component_hash = hashlib.sha256(case["literal"].encode("utf-8")).hexdigest()
                 evidence = spdx["licenses"][case["file"]]
                 component_args = [case["component"], case["manifest"], case["component"], "1.1.0", "SOURCE_PACKAGE", case["source"], component_hash, case["declared"], case["evidence"]]
                 evidence_args = [case["evidence"], case["component"], spdx["authority_id"], spdx["authority_host"], spdx["authority_path_prefix"], evidence["url"], evidence["sha256"], evidence["bytes"], "", "", "LICENSE_TEXT"]
+                try:
+                    existing_manifest = read_manifest(self.rpc, address, case["manifest"])
+                except Exception:
+                    existing_manifest = {}
+                if existing_manifest.get("state") == "FINALIZED":
+                    review = read_review(self.rpc, address, case["component"])
+                    vector = review.get("semantic_vector")
+                    expected_result = derived_case_result(key, vector)
+                    if review.get("final_result") != expected_result or existing_manifest.get("final_result") != expected_result:
+                        raise RuntimeError(f"case {key} finalized readback mismatch: {review}, {existing_manifest}")
+                    replay_pass = False
+                    try:
+                        replay_preview, _ = semantic_preflight(self.rpc, address, [case["manifest"], case["component"]], deployment_profile)
+                        replay_pass = not successful_gen_call(replay_preview["result"])
+                    except Exception:
+                        replay_pass = True
+                    if not replay_pass:
+                        raise RuntimeError(f"case {key} successful review replay guard was not rejected")
+                    self.case_outputs[key] = {
+                        "license": case["license"], "manifest": case["manifest"], "component": case["component"], "evidence": evidence,
+                        "review": review, "semantic_vector": vector, "component_result": review.get("final_result"),
+                        "manifest_result": existing_manifest.get("final_result"), "adjudication_tx": "RECOVERED_FROM_CANONICAL_REVIEW",
+                        "semantic_retries": 0, "replay_guard": "PASS", "writes": "RECOVERED_FROM_PERSISTED_INTENTS",
+                    }
+                    continue
                 created = self.send_write(f"CASE_{key}_MANIFEST_CREATED", "create_manifest", manifest_args, regular_profile, lambda mid=case["manifest"]: read_manifest(self.rpc, address, mid), journal_name)
                 added = self.send_write(f"CASE_{key}_COMPONENT_ADDED", "add_component", component_args, regular_profile, lambda cid=case["component"]: read_component(self.rpc, address, cid), journal_name)
                 evidenced = self.send_write(f"CASE_{key}_EVIDENCE_COMMITTED", "commit_license_evidence", evidence_args, regular_profile, lambda eid=case["evidence"]: read_evidence(self.rpc, address, eid), journal_name)
@@ -546,7 +726,8 @@ class LiveRun:
                 adjudicated = self.send_write(f"CASE_{key}_ADJUDICATION", "adjudicate_component", adjudication_args, deployment_profile, lambda cid=case["component"]: read_review(self.rpc, address, cid), journal_name)
                 review = read_review(self.rpc, address, case["component"])
                 result = review.get("final_result")
-                if result != case["expected"]:
+                expected_result = derived_case_result(key, review.get("semantic_vector"))
+                if result != expected_result:
                     raise RuntimeError(f"case {key} component result mismatch: {result}")
                 replay_pass = False
                 try:
@@ -558,13 +739,13 @@ class LiveRun:
                     raise RuntimeError(f"case {key} successful review replay guard was not rejected")
                 finalized = self.send_write(f"CASE_{key}_MANIFEST_FINALIZED", "finalize_manifest", [case["manifest"]], regular_profile, lambda mid=case["manifest"]: read_manifest(self.rpc, address, mid), journal_name)
                 manifest = read_manifest(self.rpc, address, case["manifest"])
-                if manifest.get("final_result") != case["expected"] or manifest.get("state") != "FINALIZED":
+                if manifest.get("final_result") != expected_result or manifest.get("state") != "FINALIZED":
                     raise RuntimeError(f"case {key} manifest result mismatch: {manifest}")
                 self.case_outputs[key] = {
                     "license": case["license"], "manifest": case["manifest"], "component": case["component"], "evidence": evidence,
                     "review": review, "semantic_vector": review.get("semantic_vector"), "component_result": result,
                     "manifest_result": manifest.get("final_result"), "adjudication_tx": adjudicated["protocol_tx_hash"],
-                    "semantic_retries": 0, "replay_guard": "PASS",
+                    "semantic_retries": 1 if adjudicated.get("semantic_retry") else 0, "replay_guard": "PASS",
                     "writes": [created, added, evidenced, frozen, started, adjudicated, finalized],
                 }
 

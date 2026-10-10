@@ -1,6 +1,23 @@
 > **HISTORICAL CHECKPOINT — NOT CURRENT RELEASE STATUS.** This record predates the successful v1.0.0 public deployment and the current unreleased v1.1 hardening branch. Current canonical v1.0.0 facts are in `docs/LIVE_DEPLOYMENT.md`, `docs/LIVE_QUALIFICATION.md`, and the `v1.0.0` release. Do not treat historical "not deployed" or "not pushed" statements below as current.
 
-# LicenseProof release-candidate status
+# Current v1.1.0 release status
+
+LicenseProof v1.1.0 is verified on Studio-dev chain `61997`.
+
+- Contract: `0x18A850BB8cA6cb0F75a5A9ab95362c12f1E349e6`
+- Deployment transaction: `0x0d81881d71a362033fa075780d6b6b5ea90c20251fcce952772f863561db5ca1`
+- Contract source SHA-256: `354f840a54e57a215790fa70182938ade78f43b505bcf05f8ded37cd4c1135fd`
+- Version: `1.1.0`
+- Semantic schema: `licenseproof.semantic.v1.1` (17 strict booleans)
+- Public methods: 28; source/schema parity PASS
+- Live qualification: MIT `COMPATIBLE_WITH_OBLIGATIONS`; Elastic-2.0 `INCOMPATIBLE`; AGPL-3.0-only `INCONCLUSIVE`
+- Deployment/qualification nonce window: 42–66, 25 transactions, 24 successful and one terminal technical semantic failure; all nonces explained
+- Current audit: Critical 0, High 0, Medium 0
+
+The v1.1 Portal submission package is prepared locally, but no Portal
+submission is claimed without authenticated Portal confirmation.
+
+# Historical v1.0.0 release-candidate status
 
 ## Frozen artifact
 

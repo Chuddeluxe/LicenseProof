@@ -1,3 +1,5 @@
+> **HISTORICAL CHECKPOINT — NOT CURRENT RELEASE STATUS.** This record predates the successful v1.0.0 public deployment and the current unreleased v1.1 hardening branch. Current canonical v1.0.0 facts are in `docs/LIVE_DEPLOYMENT.md`, `docs/LIVE_QUALIFICATION.md`, and the `v1.0.0` release. Do not treat historical "not deployed" or "not pushed" statements below as current.
+
 # LicenseProof release-candidate status
 
 ## Frozen artifact

@@ -67,7 +67,7 @@ patent_condition_present
 evidence_sufficient
 ```
 
-The deployed v1.0.0 uses exactly these fifteen booleans. The v1.1 candidate adds `applicability_clear`: conditional license facts without established applicability produce `INCONCLUSIVE`. Every field is a strict boolean; the JSON object contains exactly the keys required by the relevant version. License text is treated as untrusted data; prompt,
+The deployed v1.0.0 uses exactly these fifteen booleans. The v1.1 candidate adds `applicability_clear` and `field_of_use_conflicts_with_declared_use` (17 strict boolean fields total): conditional license facts without established applicability produce `INCONCLUSIVE`, and merely having a field-of-use restriction is not an automatic release conflict. Every field is a strict boolean; the JSON object contains exactly the keys required by the relevant version. License text is treated as untrusted data; prompt,
 role, JSON, contract-call, payment, validator, tool, and document-authority
 instructions inside it are ignored.
 

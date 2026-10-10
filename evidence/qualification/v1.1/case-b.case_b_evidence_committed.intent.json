@@ -1,0 +1,70 @@
+{
+  "arguments": [
+    "LP-V11-EVIDENCE-B",
+    "licenseproof-case-b",
+    "spdx/license-list-data/31ba1a50e5397e00a304dbadc76531740e89ee48",
+    "raw.githubusercontent.com",
+    "/spdx/license-list-data/31ba1a50e5397e00a304dbadc76531740e89ee48/text/",
+    "https://raw.githubusercontent.com/spdx/license-list-data/31ba1a50e5397e00a304dbadc76531740e89ee48/text/Elastic-2.0.txt",
+    "6448026f2e06ab3da9ed8ddda686694bba37179e88db92dea6d4aab516c957ea",
+    3802,
+    "",
+    "",
+    "LICENSE_TEXT"
+  ],
+  "broadcast_count": 1,
+  "canonical_readback": {
+    "authority_host": "raw.githubusercontent.com",
+    "authority_id": "spdx/license-list-data/31ba1a50e5397e00a304dbadc76531740e89ee48",
+    "authority_path_prefix": "/spdx/license-list-data/31ba1a50e5397e00a304dbadc76531740e89ee48/text",
+    "committed_at": "2026-10-10T10:51:43.029794Z",
+    "component_id": "licenseproof-case-b",
+    "content_byte_length": 3802,
+    "content_sha256": "6448026f2e06ab3da9ed8ddda686694bba37179e88db92dea6d4aab516c957ea",
+    "evidence_id": "LP-V11-EVIDENCE-B",
+    "evidence_type": "LICENSE_TEXT",
+    "observed_at": "",
+    "observed_at_source": "CREATOR_ASSERTED",
+    "published_at": "",
+    "source_url": "https://raw.githubusercontent.com/spdx/license-list-data/31ba1a50e5397e00a304dbadc76531740e89ee48/text/Elastic-2.0.txt"
+  },
+  "chainId": 61997,
+  "consensus_calldata_sha256": "764d4b168eace755ff3ab78a885756fb9968c8ff0278ff57bf88c37f3b906fd9",
+  "contract_address": null,
+  "evm_tx_hash": "0x57f0344e362bda07a3cd628c5a97799f794e8475176a43aececb57c5a06e8414",
+  "execution_result": null,
+  "feeValue": 100000000000010352,
+  "fee_distribution": {
+    "appealRounds": 0,
+    "executionBudgetPerRound": 25000000000000000,
+    "executionConsumed": 0,
+    "leaderTimeunitsAllocation": 100,
+    "maxPriceGenPerTimeUnit": 2,
+    "receiptFeeMaxGasPrice": 300000000,
+    "rotations": [
+      3
+    ],
+    "storageFeeMaxGasPrice": 300000000,
+    "totalMessageFees": 0,
+    "validatorTimeunitsAllocation": 200
+  },
+  "finality": {
+    "outcome": "accepted",
+    "state": "finalized"
+  },
+  "from": "0x33653E6e86807e41682D3346CDf648D6653384B1",
+  "label": "CASE_B_EVIDENCE_COMMITTED",
+  "method": "commit_license_evidence",
+  "network": "studio-dev",
+  "pre_write_nonce": 54,
+  "predicted_evm_tx_hash": "0x57f0344e362bda07a3cd628c5a97799f794e8475176a43aececb57c5a06e8414",
+  "protocol_tx_hash": "0x57f0344e362bda07a3cd628c5a97799f794e8475176a43aececb57c5a06e8414",
+  "raw_transaction_sha256": "6d1d90d1979cafa864b0af307c2dfcf7a7ce5770e0f3be1b50e849fb36c4853a",
+  "serialized_deploy_sha256": "c2e60dd274bfc72b0f77a58af7d8e9d345095332691d70abce48c14e2b74ff31",
+  "source_sha256": "354f840a54e57a215790fa70182938ade78f43b505bcf05f8ded37cd4c1135fd",
+  "status": "reconciled",
+  "successful": true,
+  "timestamp": "2026-10-10T11:01:28.267907Z",
+  "to": "0x18A850BB8cA6cb0F75a5A9ab95362c12f1E349e6",
+  "value": 0
+}

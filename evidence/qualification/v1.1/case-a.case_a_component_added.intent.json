@@ -1,0 +1,65 @@
+{
+  "arguments": [
+    "licenseproof-case-a",
+    "LP-V11-A-20261010T104217Z",
+    "licenseproof-case-a",
+    "1.1.0",
+    "SOURCE_PACKAGE",
+    "spdx:MIT",
+    "400e8a1e0aa73cb0a534affc515c431939681194a546c12789722ff188804dd0",
+    "MIT",
+    "LP-V11-EVIDENCE-A"
+  ],
+  "broadcast_count": 1,
+  "canonical_readback": {
+    "component_id": "licenseproof-case-a",
+    "component_type": "SOURCE_PACKAGE",
+    "declared_license_id": "MIT",
+    "license_evidence_id": "LP-V11-EVIDENCE-A",
+    "manifest_id": "LP-V11-A-20261010T104217Z",
+    "name": "licenseproof-case-a",
+    "package_hash": "400e8a1e0aa73cb0a534affc515c431939681194a546c12789722ff188804dd0",
+    "source_identifier": "spdx:MIT",
+    "state": "UNREVIEWED",
+    "version": "1.1.0"
+  },
+  "chainId": 61997,
+  "consensus_calldata_sha256": "e0d8e3a411960464a272e38ae4d687a507a982a5b4615c7680e0cd77b287529a",
+  "contract_address": null,
+  "evm_tx_hash": "0x9d7c3aa5e4d93b828bcdfc7f5bbc4364a8397f8b61232350fecd6eb837c0f45c",
+  "execution_result": null,
+  "feeValue": 100000000000010352,
+  "fee_distribution": {
+    "appealRounds": 0,
+    "executionBudgetPerRound": 25000000000000000,
+    "executionConsumed": 0,
+    "leaderTimeunitsAllocation": 100,
+    "maxPriceGenPerTimeUnit": 2,
+    "receiptFeeMaxGasPrice": 300000000,
+    "rotations": [
+      3
+    ],
+    "storageFeeMaxGasPrice": 300000000,
+    "totalMessageFees": 0,
+    "validatorTimeunitsAllocation": 200
+  },
+  "finality": {
+    "outcome": "accepted",
+    "state": "finalized"
+  },
+  "from": "0x33653E6e86807e41682D3346CDf648D6653384B1",
+  "label": "CASE_A_COMPONENT_ADDED",
+  "method": "add_component",
+  "network": "studio-dev",
+  "pre_write_nonce": 46,
+  "predicted_evm_tx_hash": "0x9d7c3aa5e4d93b828bcdfc7f5bbc4364a8397f8b61232350fecd6eb837c0f45c",
+  "protocol_tx_hash": "0x9d7c3aa5e4d93b828bcdfc7f5bbc4364a8397f8b61232350fecd6eb837c0f45c",
+  "raw_transaction_sha256": "8cc52457d5c7940b3d0fc9ef6ca6ae7cd5136cfbfee4426193ccee16f55a9e4c",
+  "serialized_deploy_sha256": "b48c6859dd7263346e7eb1bf6608aafd112a6fe53bc1a87bb7865c861a389f06",
+  "source_sha256": "354f840a54e57a215790fa70182938ade78f43b505bcf05f8ded37cd4c1135fd",
+  "status": "reconciled",
+  "successful": true,
+  "timestamp": "2026-10-10T10:45:28.688916Z",
+  "to": "0x18A850BB8cA6cb0F75a5A9ab95362c12f1E349e6",
+  "value": 0
+}

@@ -1,0 +1,73 @@
+{
+  "arguments": [
+    "LP-V11-POLICY-20261010T104217Z",
+    "LicenseProof declared proprietary SaaS policy",
+    true,
+    true,
+    false,
+    true,
+    false,
+    false,
+    "PROPRIETARY",
+    "HOSTED_ONLY",
+    "1.1.0"
+  ],
+  "broadcast_count": 1,
+  "canonical_readback": {
+    "commercial_use": true,
+    "created_at": "2026-10-10T10:42:28.301988Z",
+    "creator": "0x33653E6e86807e41682D3346CDf648D6653384B1",
+    "derivative_distribution": false,
+    "distribution_model": "HOSTED_ONLY",
+    "frozen_at": "",
+    "hosted_service": true,
+    "modification": true,
+    "name": "LicenseProof declared proprietary SaaS policy",
+    "policy_hash": "78f93851bc2b29d428bb81f69945f6c745a21d6f6101da10b5acbe723a79a134",
+    "policy_id": "LP-V11-POLICY-20261010T104217Z",
+    "policy_version": "1.1.0",
+    "redistribution": false,
+    "source_model": "PROPRIETARY",
+    "state": "DRAFT",
+    "sublicensing": false
+  },
+  "chainId": 61997,
+  "consensus_calldata_sha256": "6a96a8ef3fc1ace5cbd53601bcddfd05ccf7701cadd3bd66dc32ff78ad9bc24d",
+  "contract_address": null,
+  "evm_tx_hash": "0x7aa11fcb736b5f40350861278418a0f04ebfddeb95dcdcae90dd0a0803d29b51",
+  "execution_result": null,
+  "feeValue": 100000000000010352,
+  "fee_distribution": {
+    "appealRounds": 0,
+    "executionBudgetPerRound": 25000000000000000,
+    "executionConsumed": 0,
+    "leaderTimeunitsAllocation": 100,
+    "maxPriceGenPerTimeUnit": 2,
+    "receiptFeeMaxGasPrice": 300000000,
+    "rotations": [
+      3
+    ],
+    "storageFeeMaxGasPrice": 300000000,
+    "totalMessageFees": 0,
+    "validatorTimeunitsAllocation": 200
+  },
+  "finality": {
+    "outcome": "accepted",
+    "state": "finalized"
+  },
+  "from": "0x33653E6e86807e41682D3346CDf648D6653384B1",
+  "label": "POLICY_CREATED",
+  "method": "create_release_policy",
+  "network": "studio-dev",
+  "pre_write_nonce": 43,
+  "predicted_evm_tx_hash": "0x7aa11fcb736b5f40350861278418a0f04ebfddeb95dcdcae90dd0a0803d29b51",
+  "protocol_tx_hash": "0x7aa11fcb736b5f40350861278418a0f04ebfddeb95dcdcae90dd0a0803d29b51",
+  "raw_transaction_sha256": "c529f043d44155d45848ae2d5f65ed44bb1c5389f15302e81cc06f73ac6532cb",
+  "serialized_deploy_sha256": "bea363bc64871428bd0a5df2a35d2c354178c3530fe3d629776586216a615aca",
+  "source_sha256": "354f840a54e57a215790fa70182938ade78f43b505bcf05f8ded37cd4c1135fd",
+  "status": "reconciled",
+  "successful": true,
+  "timestamp": "2026-10-10T10:43:02.352078Z",
+  "to": "0x18A850BB8cA6cb0F75a5A9ab95362c12f1E349e6",
+  "value": 0
+}

@@ -1,0 +1,58 @@
+{
+  "arguments": [
+    "LP-V11-A-20261010T104217Z",
+    "licenseproof-case-a"
+  ],
+  "broadcast_count": 1,
+  "canonical_readback": {
+    "component_id": "licenseproof-case-a",
+    "component_type": "SOURCE_PACKAGE",
+    "declared_license_id": "MIT",
+    "license_evidence_id": "LP-V11-EVIDENCE-A",
+    "manifest_id": "LP-V11-A-20261010T104217Z",
+    "name": "licenseproof-case-a",
+    "package_hash": "400e8a1e0aa73cb0a534affc515c431939681194a546c12789722ff188804dd0",
+    "source_identifier": "spdx:MIT",
+    "state": "UNREVIEWED",
+    "version": "1.1.0"
+  },
+  "chainId": 61997,
+  "consensus_calldata_sha256": "78732c08c7c33f92ff1202b1f2c352f5c1e9d72b3ec1c74f96b936e11c4a9501",
+  "contract_address": null,
+  "evm_tx_hash": "0xce424c08320f1938ce728e637fc3b50248cd831796eb23e7098930f60b622711",
+  "execution_result": null,
+  "feeValue": 100000000000010352,
+  "fee_distribution": {
+    "appealRounds": 0,
+    "executionBudgetPerRound": 25000000000000000,
+    "executionConsumed": 0,
+    "leaderTimeunitsAllocation": 100,
+    "maxPriceGenPerTimeUnit": 2,
+    "receiptFeeMaxGasPrice": 300000000,
+    "rotations": [
+      3
+    ],
+    "storageFeeMaxGasPrice": 300000000,
+    "totalMessageFees": 0,
+    "validatorTimeunitsAllocation": 200
+  },
+  "finality": {
+    "outcome": "accepted",
+    "state": "finalized"
+  },
+  "from": "0x33653E6e86807e41682D3346CDf648D6653384B1",
+  "label": "CASE_A_REVIEW_STARTED",
+  "method": "begin_component_review",
+  "network": "studio-dev",
+  "pre_write_nonce": 49,
+  "predicted_evm_tx_hash": "0xce424c08320f1938ce728e637fc3b50248cd831796eb23e7098930f60b622711",
+  "protocol_tx_hash": "0xce424c08320f1938ce728e637fc3b50248cd831796eb23e7098930f60b622711",
+  "raw_transaction_sha256": "d9fd5dfc843e2286d9c2d933b26624508c0733cf2e652ac2ef573a22b79221eb",
+  "serialized_deploy_sha256": "007afc4f18f7f4672750b88c7ffac8f25f7352497187c9475d8e9aaf5d6e6b3d",
+  "source_sha256": "354f840a54e57a215790fa70182938ade78f43b505bcf05f8ded37cd4c1135fd",
+  "status": "reconciled",
+  "successful": true,
+  "timestamp": "2026-10-10T10:47:53.273197Z",
+  "to": "0x18A850BB8cA6cb0F75a5A9ab95362c12f1E349e6",
+  "value": 0
+}

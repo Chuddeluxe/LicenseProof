@@ -1,0 +1,24 @@
+{
+  "authority_host": "raw.githubusercontent.com",
+  "authority_id": "spdx/license-list-data/31ba1a50e5397e00a304dbadc76531740e89ee48",
+  "authority_path_prefix": "/spdx/license-list-data/31ba1a50e5397e00a304dbadc76531740e89ee48/text/",
+  "commit": "31ba1a50e5397e00a304dbadc76531740e89ee48",
+  "licenses": {
+    "AGPL-3.0-only.txt": {
+      "bytes": 34020,
+      "sha256": "d8a6cc31abc16b6748c7a21f21611f5a1ec33f67d22ca23d7da1c19b95496bee",
+      "url": "https://raw.githubusercontent.com/spdx/license-list-data/31ba1a50e5397e00a304dbadc76531740e89ee48/text/AGPL-3.0-only.txt"
+    },
+    "Elastic-2.0.txt": {
+      "bytes": 3802,
+      "sha256": "6448026f2e06ab3da9ed8ddda686694bba37179e88db92dea6d4aab516c957ea",
+      "url": "https://raw.githubusercontent.com/spdx/license-list-data/31ba1a50e5397e00a304dbadc76531740e89ee48/text/Elastic-2.0.txt"
+    },
+    "MIT.txt": {
+      "bytes": 1078,
+      "sha256": "b05785f9f18e6716bab63424b11454513b9943a222595b70411009202fc592b5",
+      "url": "https://raw.githubusercontent.com/spdx/license-list-data/31ba1a50e5397e00a304dbadc76531740e89ee48/text/MIT.txt"
+    }
+  },
+  "verified_at": "2026-10-10T11:01:02.364091Z"
+}

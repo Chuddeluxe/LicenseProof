@@ -1,0 +1,272 @@
+{
+  "account_after": {
+    "address": "0x33653e6e86807e41682d3346cdf648d6653384b1",
+    "balance_hex": "0x11f53332fb8314c3",
+    "balance_wei": 1293996761999938755,
+    "chain_id": 61997,
+    "latest_nonce": 67,
+    "pending_nonce": 67
+  },
+  "audit": {
+    "full_count": 23,
+    "page_count": 23,
+    "page_matches_full": true
+  },
+  "cases": {
+    "A": {
+      "component": {
+        "component_id": "licenseproof-case-a",
+        "component_type": "SOURCE_PACKAGE",
+        "declared_license_id": "MIT",
+        "license_evidence_id": "LP-V11-EVIDENCE-A",
+        "manifest_id": "LP-V11-A-20261010T104217Z",
+        "name": "licenseproof-case-a",
+        "package_hash": "400e8a1e0aa73cb0a534affc515c431939681194a546c12789722ff188804dd0",
+        "source_identifier": "spdx:MIT",
+        "state": "FINALIZED",
+        "version": "1.1.0"
+      },
+      "evidence": {
+        "content_byte_length": 1078,
+        "content_sha256": "b05785f9f18e6716bab63424b11454513b9943a222595b70411009202fc592b5",
+        "evidence_id": "LP-V11-EVIDENCE-A"
+      },
+      "manifest": {
+        "component_count": 1,
+        "created_at": "2026-10-10T10:44:02.363168Z",
+        "creator": "0x33653E6e86807e41682D3346CDf648D6653384B1",
+        "final_result": "COMPATIBLE_WITH_OBLIGATIONS",
+        "finalized_at": "2026-10-10T10:49:12.422252Z",
+        "frozen_at": "2026-10-10T10:46:26.982540Z",
+        "manifest_hash": "27e0fe94936098b6b0905669b408e7c11c9bf1547d132535d7302c0d555f72d6",
+        "manifest_id": "LP-V11-A-20261010T104217Z",
+        "name": "MIT proprietary SaaS qualification",
+        "policy_id": "LP-V11-POLICY-20261010T104217Z",
+        "release_version": "1.1.0-live-a",
+        "reviewed_component_count": 1,
+        "state": "FINALIZED",
+        "supersedes_manifest_id": ""
+      },
+      "review": {
+        "component_id": "licenseproof-case-a",
+        "final_result": "COMPATIBLE_WITH_OBLIGATIONS",
+        "manifest_id": "LP-V11-A-20261010T104217Z",
+        "review_identity": {
+          "component_id": "licenseproof-case-a",
+          "evidence_id": "LP-V11-EVIDENCE-A",
+          "license_sha256": "b05785f9f18e6716bab63424b11454513b9943a222595b70411009202fc592b5",
+          "manifest_hash": "27e0fe94936098b6b0905669b408e7c11c9bf1547d132535d7302c0d555f72d6",
+          "manifest_id": "LP-V11-A-20261010T104217Z",
+          "package_hash": "400e8a1e0aa73cb0a534affc515c431939681194a546c12789722ff188804dd0",
+          "policy_hash": "78f93851bc2b29d428bb81f69945f6c745a21d6f6101da10b5acbe723a79a134",
+          "policy_id": "LP-V11-POLICY-20261010T104217Z",
+          "semantic_schema_version": "licenseproof.semantic.v1.1"
+        },
+        "review_key": "c75a083826ab8d28ac3358ecf7a7e6f4d10b071a8b923baa0ee8c156bc4c3b21",
+        "semantic_vector": {
+          "applicability_clear": true,
+          "attribution_required": true,
+          "commercial_use_permitted": true,
+          "derivative_distribution_permitted": true,
+          "evidence_sufficient": true,
+          "field_of_use_conflicts_with_declared_use": false,
+          "field_of_use_restriction": false,
+          "hosted_service_permitted": true,
+          "modification_permitted": true,
+          "network_source_disclosure_required": false,
+          "notice_preservation_required": true,
+          "patent_condition_present": false,
+          "proprietary_distribution_permitted": true,
+          "redistribution_permitted": true,
+          "same_license_required": false,
+          "source_disclosure_required": false,
+          "sublicensing_permitted": true
+        },
+        "state": "FINALIZED"
+      },
+      "successor": ""
+    },
+    "B": {
+      "component": {
+        "component_id": "licenseproof-case-b",
+        "component_type": "SOURCE_PACKAGE",
+        "declared_license_id": "Elastic-2.0",
+        "license_evidence_id": "LP-V11-EVIDENCE-B",
+        "manifest_id": "LP-V11-B-20261010T104217Z",
+        "name": "licenseproof-case-b",
+        "package_hash": "7f0b10394ec5879f57a8952cd88758e5f528d52f500ad889be79970be2741cc2",
+        "source_identifier": "spdx:Elastic-2.0",
+        "state": "FINALIZED",
+        "version": "1.1.0"
+      },
+      "evidence": {
+        "content_byte_length": 3802,
+        "content_sha256": "6448026f2e06ab3da9ed8ddda686694bba37179e88db92dea6d4aab516c957ea",
+        "evidence_id": "LP-V11-EVIDENCE-B"
+      },
+      "manifest": {
+        "component_count": 1,
+        "created_at": "2026-10-10T10:50:00.456152Z",
+        "creator": "0x33653E6e86807e41682D3346CDf648D6653384B1",
+        "final_result": "INCOMPATIBLE",
+        "finalized_at": "2026-10-10T11:03:44.823784Z",
+        "frozen_at": "2026-10-10T10:52:33.441374Z",
+        "manifest_hash": "c8c6596373a53d5b94f7e0f9d93434e3021cae2dfb7e02b4189d80ed9a4e306e",
+        "manifest_id": "LP-V11-B-20261010T104217Z",
+        "name": "Elastic hosted-service restriction qualification",
+        "policy_id": "LP-V11-POLICY-20261010T104217Z",
+        "release_version": "1.1.0-live-b",
+        "reviewed_component_count": 1,
+        "state": "FINALIZED",
+        "supersedes_manifest_id": ""
+      },
+      "review": {
+        "component_id": "licenseproof-case-b",
+        "final_result": "INCOMPATIBLE",
+        "manifest_id": "LP-V11-B-20261010T104217Z",
+        "review_identity": {
+          "component_id": "licenseproof-case-b",
+          "evidence_id": "LP-V11-EVIDENCE-B",
+          "license_sha256": "6448026f2e06ab3da9ed8ddda686694bba37179e88db92dea6d4aab516c957ea",
+          "manifest_hash": "c8c6596373a53d5b94f7e0f9d93434e3021cae2dfb7e02b4189d80ed9a4e306e",
+          "manifest_id": "LP-V11-B-20261010T104217Z",
+          "package_hash": "7f0b10394ec5879f57a8952cd88758e5f528d52f500ad889be79970be2741cc2",
+          "policy_hash": "78f93851bc2b29d428bb81f69945f6c745a21d6f6101da10b5acbe723a79a134",
+          "policy_id": "LP-V11-POLICY-20261010T104217Z",
+          "semantic_schema_version": "licenseproof.semantic.v1.1"
+        },
+        "review_key": "18548d2f1b3a67fb5857db757337effacdb6307713bf3d8648accf319084b004",
+        "semantic_vector": {
+          "applicability_clear": true,
+          "attribution_required": true,
+          "commercial_use_permitted": true,
+          "derivative_distribution_permitted": true,
+          "evidence_sufficient": true,
+          "field_of_use_conflicts_with_declared_use": true,
+          "field_of_use_restriction": true,
+          "hosted_service_permitted": false,
+          "modification_permitted": true,
+          "network_source_disclosure_required": false,
+          "notice_preservation_required": true,
+          "patent_condition_present": true,
+          "proprietary_distribution_permitted": true,
+          "redistribution_permitted": true,
+          "same_license_required": false,
+          "source_disclosure_required": false,
+          "sublicensing_permitted": false
+        },
+        "state": "FINALIZED"
+      },
+      "successor": ""
+    },
+    "C": {
+      "component": {
+        "component_id": "licenseproof-case-c",
+        "component_type": "SOURCE_PACKAGE",
+        "declared_license_id": "AGPL-3.0-only",
+        "license_evidence_id": "LP-V11-EVIDENCE-C",
+        "manifest_id": "LP-V11-C-20261010T110102Z",
+        "name": "licenseproof-case-c",
+        "package_hash": "5eb95a57c14d31a5113c7a6b7160f589a832df584799ebb54024741955884504",
+        "source_identifier": "spdx:AGPL-3.0-only",
+        "state": "FINALIZED",
+        "version": "1.1.0"
+      },
+      "evidence": {
+        "content_byte_length": 34020,
+        "content_sha256": "d8a6cc31abc16b6748c7a21f21611f5a1ec33f67d22ca23d7da1c19b95496bee",
+        "evidence_id": "LP-V11-EVIDENCE-C"
+      },
+      "manifest": {
+        "component_count": 1,
+        "created_at": "2026-10-10T11:04:38.961824Z",
+        "creator": "0x33653E6e86807e41682D3346CDf648D6653384B1",
+        "final_result": "INCONCLUSIVE",
+        "finalized_at": "2026-10-10T11:10:18.070441Z",
+        "frozen_at": "2026-10-10T11:07:04.283443Z",
+        "manifest_hash": "b52e140af86392dda7414d6f11a3754c3cedc41037a224ae88700907ce42060a",
+        "manifest_id": "LP-V11-C-20261010T110102Z",
+        "name": "AGPL network-source obligation qualification",
+        "policy_id": "LP-V11-POLICY-20261010T104217Z",
+        "release_version": "1.1.0-live-c",
+        "reviewed_component_count": 1,
+        "state": "FINALIZED",
+        "supersedes_manifest_id": ""
+      },
+      "review": {
+        "component_id": "licenseproof-case-c",
+        "final_result": "INCONCLUSIVE",
+        "manifest_id": "LP-V11-C-20261010T110102Z",
+        "review_identity": {
+          "component_id": "licenseproof-case-c",
+          "evidence_id": "LP-V11-EVIDENCE-C",
+          "license_sha256": "d8a6cc31abc16b6748c7a21f21611f5a1ec33f67d22ca23d7da1c19b95496bee",
+          "manifest_hash": "b52e140af86392dda7414d6f11a3754c3cedc41037a224ae88700907ce42060a",
+          "manifest_id": "LP-V11-C-20261010T110102Z",
+          "package_hash": "5eb95a57c14d31a5113c7a6b7160f589a832df584799ebb54024741955884504",
+          "policy_hash": "78f93851bc2b29d428bb81f69945f6c745a21d6f6101da10b5acbe723a79a134",
+          "policy_id": "LP-V11-POLICY-20261010T104217Z",
+          "semantic_schema_version": "licenseproof.semantic.v1.1"
+        },
+        "review_key": "e7cdff6841629a84efac55ea7ee6a1ef45ea375a8637cbd2cca3db2ddefb3e66",
+        "semantic_vector": {
+          "applicability_clear": false,
+          "attribution_required": true,
+          "commercial_use_permitted": true,
+          "derivative_distribution_permitted": true,
+          "evidence_sufficient": true,
+          "field_of_use_conflicts_with_declared_use": false,
+          "field_of_use_restriction": false,
+          "hosted_service_permitted": true,
+          "modification_permitted": true,
+          "network_source_disclosure_required": true,
+          "notice_preservation_required": true,
+          "patent_condition_present": true,
+          "proprietary_distribution_permitted": false,
+          "redistribution_permitted": true,
+          "same_license_required": true,
+          "source_disclosure_required": true,
+          "sublicensing_permitted": false
+        },
+        "state": "FINALIZED"
+      },
+      "successor": ""
+    }
+  },
+  "chainId": 61997,
+  "contract": "0x18A850BB8cA6cb0F75a5A9ab95362c12f1E349e6",
+  "contract_info": {
+    "contract_version": "1.1.0",
+    "runner": "py-genlayer:5jycge4q8k23462jtb0b9fyey1s9qz928sz2nbrd9mg4sxqg2qng",
+    "semantic_schema_version": "licenseproof.semantic.v1.1"
+  },
+  "deployed_schema_methods": 28,
+  "deployed_source_sha256": "354f840a54e57a215790fa70182938ade78f43b505bcf05f8ded37cd4c1135fd",
+  "manifest_ids": [
+    "LP-V11-A-20261010T104217Z",
+    "LP-V11-B-20261010T104217Z",
+    "LP-V11-C-20261010T110102Z"
+  ],
+  "network": "studio-dev",
+  "policy": {
+    "commercial_use": true,
+    "created_at": "2026-10-10T10:42:28.301988Z",
+    "creator": "0x33653E6e86807e41682D3346CDf648D6653384B1",
+    "derivative_distribution": false,
+    "distribution_model": "HOSTED_ONLY",
+    "frozen_at": "2026-10-10T10:43:16.049621Z",
+    "hosted_service": true,
+    "modification": true,
+    "name": "LicenseProof declared proprietary SaaS policy",
+    "policy_hash": "78f93851bc2b29d428bb81f69945f6c745a21d6f6101da10b5acbe723a79a134",
+    "policy_id": "LP-V11-POLICY-20261010T104217Z",
+    "policy_version": "1.1.0",
+    "redistribution": false,
+    "source_model": "PROPRIETARY",
+    "state": "FROZEN",
+    "sublicensing": false
+  },
+  "policy_ids": [
+    "LP-V11-POLICY-20261010T104217Z"
+  ]
+}

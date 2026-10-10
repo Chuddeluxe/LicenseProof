@@ -162,8 +162,10 @@ def test_network_and_field_of_use_gates(env, policy_args):
     # The field-of-use rule is independently deterministic in the pure result derivation.
     module = __import__("sys").modules["_contract_LicenseProof"]
     policy = {"commercial_use": True, "hosted_service": False, "redistribution": False, "modification": False, "sublicensing": False, "derivative_distribution": False, "source_model": "OPEN_SOURCE", "distribution_model": "INTERNAL_ONLY"}
-    vector = module._semantic_vector(semantic(field_of_use_restriction=True))
+    vector = module._semantic_vector(semantic(field_of_use_restriction=True, field_of_use_conflicts_with_declared_use=True))
     assert module._derive_result(policy, vector) == "INCOMPATIBLE"
+    no_conflict = module._semantic_vector(semantic(field_of_use_restriction=True, field_of_use_conflicts_with_declared_use=False))
+    assert module._derive_result(policy, no_conflict) == "COMPATIBLE"
 
 
 def test_short_or_uppercase_hash_fails(env, policy_args):

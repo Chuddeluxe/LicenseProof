@@ -1,0 +1,9 @@
+title = "LicenseProof secret scan"
+
+[allowlist]
+description = "Deterministic public v1.1 review identifiers are provenance digests, not credentials."
+regexes = [
+  "c75a083826ab8d28ac3358ecf7a7e6f4d10b071a8b923baa0ee8c156bc4c3b21",
+  "18548d2f1b3a67fb5857db757337effacdb6307713bf3d8648accf319084b004",
+  "e7cdff6841629a84efac55ea7ee6a1ef45ea375a8637cbd2cca3db2ddefb3e66",
+]

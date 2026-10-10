@@ -1,0 +1,61 @@
+{
+  "arguments": [
+    "LP-V11-A-20261010T104217Z"
+  ],
+  "broadcast_count": 1,
+  "canonical_readback": {
+    "component_count": 1,
+    "created_at": "2026-10-10T10:44:02.363168Z",
+    "creator": "0x33653E6e86807e41682D3346CDf648D6653384B1",
+    "final_result": "COMPATIBLE_WITH_OBLIGATIONS",
+    "finalized_at": "2026-10-10T10:49:12.422252Z",
+    "frozen_at": "2026-10-10T10:46:26.982540Z",
+    "manifest_hash": "27e0fe94936098b6b0905669b408e7c11c9bf1547d132535d7302c0d555f72d6",
+    "manifest_id": "LP-V11-A-20261010T104217Z",
+    "name": "MIT proprietary SaaS qualification",
+    "policy_id": "LP-V11-POLICY-20261010T104217Z",
+    "release_version": "1.1.0-live-a",
+    "reviewed_component_count": 1,
+    "state": "FINALIZED",
+    "supersedes_manifest_id": ""
+  },
+  "chainId": 61997,
+  "consensus_calldata_sha256": "8d2a057dc349e6f1f02e46c8228b8b34cee804a27a8ef0a98b3c6c404cace66b",
+  "contract_address": null,
+  "evm_tx_hash": "0xf7afeb134608a9d71339471a1cb2d8ee65783c14d572500fc954772c9ccef3d2",
+  "execution_result": null,
+  "feeValue": 100000000000010352,
+  "fee_distribution": {
+    "appealRounds": 0,
+    "executionBudgetPerRound": 25000000000000000,
+    "executionConsumed": 0,
+    "leaderTimeunitsAllocation": 100,
+    "maxPriceGenPerTimeUnit": 2,
+    "receiptFeeMaxGasPrice": 300000000,
+    "rotations": [
+      3
+    ],
+    "storageFeeMaxGasPrice": 300000000,
+    "totalMessageFees": 0,
+    "validatorTimeunitsAllocation": 200
+  },
+  "finality": {
+    "outcome": "accepted",
+    "state": "finalized"
+  },
+  "from": "0x33653E6e86807e41682D3346CDf648D6653384B1",
+  "label": "CASE_A_MANIFEST_FINALIZED",
+  "method": "finalize_manifest",
+  "network": "studio-dev",
+  "pre_write_nonce": 51,
+  "predicted_evm_tx_hash": "0xf7afeb134608a9d71339471a1cb2d8ee65783c14d572500fc954772c9ccef3d2",
+  "protocol_tx_hash": "0xf7afeb134608a9d71339471a1cb2d8ee65783c14d572500fc954772c9ccef3d2",
+  "raw_transaction_sha256": "6ae964d32fae6e028037e3b288373c271b141f1c67257fb4c724417d30dffa31",
+  "serialized_deploy_sha256": "24d6104bbeb8082c35813e9fcd0c6672773ada14269910f86a8d03739179a6e2",
+  "source_sha256": "354f840a54e57a215790fa70182938ade78f43b505bcf05f8ded37cd4c1135fd",
+  "status": "reconciled",
+  "successful": true,
+  "timestamp": "2026-10-10T10:49:47.037823Z",
+  "to": "0x18A850BB8cA6cb0F75a5A9ab95362c12f1E349e6",
+  "value": 0
+}

@@ -1,0 +1,65 @@
+{
+  "arguments": [
+    "licenseproof-case-b",
+    "LP-V11-B-20261010T104217Z",
+    "licenseproof-case-b",
+    "1.1.0",
+    "SOURCE_PACKAGE",
+    "spdx:Elastic-2.0",
+    "7f0b10394ec5879f57a8952cd88758e5f528d52f500ad889be79970be2741cc2",
+    "Elastic-2.0",
+    "LP-V11-EVIDENCE-B"
+  ],
+  "broadcast_count": 1,
+  "canonical_readback": {
+    "component_id": "licenseproof-case-b",
+    "component_type": "SOURCE_PACKAGE",
+    "declared_license_id": "Elastic-2.0",
+    "license_evidence_id": "LP-V11-EVIDENCE-B",
+    "manifest_id": "LP-V11-B-20261010T104217Z",
+    "name": "licenseproof-case-b",
+    "package_hash": "7f0b10394ec5879f57a8952cd88758e5f528d52f500ad889be79970be2741cc2",
+    "source_identifier": "spdx:Elastic-2.0",
+    "state": "UNREVIEWED",
+    "version": "1.1.0"
+  },
+  "chainId": 61997,
+  "consensus_calldata_sha256": "dd70ac0829cdcacb3202d19700f308e20b19c82f002021d3a2b43c1cc67066fa",
+  "contract_address": null,
+  "evm_tx_hash": "0xc6b305ea18815bc7aaa0533a7cfa3a8aab05e79b0e13a5ee6651e4c5e0675f28",
+  "execution_result": null,
+  "feeValue": 100000000000010352,
+  "fee_distribution": {
+    "appealRounds": 0,
+    "executionBudgetPerRound": 25000000000000000,
+    "executionConsumed": 0,
+    "leaderTimeunitsAllocation": 100,
+    "maxPriceGenPerTimeUnit": 2,
+    "receiptFeeMaxGasPrice": 300000000,
+    "rotations": [
+      3
+    ],
+    "storageFeeMaxGasPrice": 300000000,
+    "totalMessageFees": 0,
+    "validatorTimeunitsAllocation": 200
+  },
+  "finality": {
+    "outcome": "accepted",
+    "state": "finalized"
+  },
+  "from": "0x33653E6e86807e41682D3346CDf648D6653384B1",
+  "label": "CASE_B_COMPONENT_ADDED",
+  "method": "add_component",
+  "network": "studio-dev",
+  "pre_write_nonce": 53,
+  "predicted_evm_tx_hash": "0xc6b305ea18815bc7aaa0533a7cfa3a8aab05e79b0e13a5ee6651e4c5e0675f28",
+  "protocol_tx_hash": "0xc6b305ea18815bc7aaa0533a7cfa3a8aab05e79b0e13a5ee6651e4c5e0675f28",
+  "raw_transaction_sha256": "09234c2c53d902d3475127fca5e78dd84b87c0ecc06393849f6246b35f1f6a3a",
+  "serialized_deploy_sha256": "6e13a8e5f1bb1f027a67b660f8037510c57e7899ee46f7bdf9ccad43ce1eb526",
+  "source_sha256": "354f840a54e57a215790fa70182938ade78f43b505bcf05f8ded37cd4c1135fd",
+  "status": "reconciled",
+  "successful": true,
+  "timestamp": "2026-10-10T11:01:24.274571Z",
+  "to": "0x18A850BB8cA6cb0F75a5A9ab95362c12f1E349e6",
+  "value": 0
+}

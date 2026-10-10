@@ -1,0 +1,44 @@
+{
+  "arguments": [],
+  "broadcast_count": 1,
+  "canonical_readback": null,
+  "chainId": 61997,
+  "consensus_calldata_sha256": "81a4d004a5d04f2f00913bcd4cae86563a4c685b87d1fd4d18f997bd92a3c470",
+  "contract_address": "0x18A850BB8cA6cb0F75a5A9ab95362c12f1E349e6",
+  "evm_tx_hash": "0x0d81881d71a362033fa075780d6b6b5ea90c20251fcce952772f863561db5ca1",
+  "execution_result": null,
+  "feeValue": 100000000000010352,
+  "fee_distribution": {
+    "appealRounds": 0,
+    "executionBudgetPerRound": 25000000000000000,
+    "executionConsumed": 0,
+    "leaderTimeunitsAllocation": 100,
+    "maxPriceGenPerTimeUnit": 2,
+    "receiptFeeMaxGasPrice": 300000000,
+    "rotations": [
+      3
+    ],
+    "storageFeeMaxGasPrice": 300000000,
+    "totalMessageFees": 0,
+    "validatorTimeunitsAllocation": 200
+  },
+  "finality": {
+    "outcome": "accepted",
+    "state": "finalized"
+  },
+  "from": "0x33653E6e86807e41682D3346CDf648D6653384B1",
+  "label": "DEPLOYMENT",
+  "method": "deploy",
+  "network": "studio-dev",
+  "pre_write_nonce": 42,
+  "predicted_evm_tx_hash": "0x0d81881d71a362033fa075780d6b6b5ea90c20251fcce952772f863561db5ca1",
+  "protocol_tx_hash": "0x0d81881d71a362033fa075780d6b6b5ea90c20251fcce952772f863561db5ca1",
+  "raw_transaction_sha256": "62e2d4ed21420f038e9cf3447f9c7496bb19ec4d25dc31c815049939f8c3a5bc",
+  "serialized_deploy_sha256": "177c45ddaa21dc7221cbc8f5e553d69b0f8461e8aa6f6eed4e6d957bffea9c4e",
+  "source_sha256": "354f840a54e57a215790fa70182938ade78f43b505bcf05f8ded37cd4c1135fd",
+  "status": "reconciled",
+  "successful": true,
+  "timestamp": "2026-10-10T10:41:06.665295Z",
+  "to": null,
+  "value": 0
+}

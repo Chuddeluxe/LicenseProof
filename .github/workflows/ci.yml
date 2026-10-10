@@ -4,6 +4,7 @@ on:
   push:
     branches: [main]
   pull_request:
+  workflow_dispatch:
 
 permissions:
   contents: read
@@ -11,9 +12,13 @@ permissions:
 jobs:
   verify:
     runs-on: ubuntu-latest
+    env:
+      EXPECTED_CONTRACT_SHA256: 354f840a54e57a215790fa70182938ade78f43b505bcf05f8ded37cd4c1135fd
     steps:
       - name: Check out source
         uses: actions/checkout@v4
+        with:
+          fetch-depth: 0  # required for the historical diff range scanned by Gitleaks
 
       - name: Set up Python
         uses: actions/setup-python@v5
@@ -54,14 +59,26 @@ jobs:
       - name: Run complete test suite
         run: python -m pytest -q
 
-      - name: Run mutation audit
-        run: python scripts/mutation_audit.py
-
       - name: Verify schema and ABI parity
         run: python scripts/verify_schema.py
 
       - name: Verify frozen source
         run: python scripts/verify_source.py
+
+      - name: Read-only Studio-dev v1.1 schema and deploy preflight
+        run: python -m scripts.verify_studio_v11
+
+      - name: Verify read-only checkers did not modify files
+        run: git diff --exit-code
+
+      - name: Run mutation audit
+        run: python scripts/mutation_audit.py
+
+
+      - name: Gitleaks independent secret scan
+        uses: gitleaks/gitleaks-action@ff98106e4c7b2bc287b24eaf42907196329070c7
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Secret scan
         shell: bash

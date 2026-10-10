@@ -264,6 +264,26 @@
         }
       ]
     },
+    "get_audit_events_page": {
+      "kwparams": {},
+      "params": [
+        [
+          "start",
+          "int"
+        ],
+        [
+          "limit",
+          "int"
+        ]
+      ],
+      "payable": false,
+      "readonly": true,
+      "ret": [
+        {
+          "$rep": "string"
+        }
+      ]
+    },
     "get_component": {
       "kwparams": {},
       "params": [
@@ -377,6 +397,18 @@
           "string"
         ]
       ],
+      "readonly": true,
+      "ret": "string"
+    },
+    "get_manifest_successor": {
+      "kwparams": {},
+      "params": [
+        [
+          "manifest_id",
+          "string"
+        ]
+      ],
+      "payable": false,
       "readonly": true,
       "ret": "string"
     },

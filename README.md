@@ -1,6 +1,8 @@
 # LicenseProof
 
-Consensus-backed software license compatibility before release.
+Consensus-backed, policy-relative classification of committed software license text before release.
+
+> **Release status:** v1.0.0 is the historical deployed demonstration. The `hardening/licenseproof-v1-1` branch is an **unreleased candidate**. No v1.1 Studio-dev deployment or live qualification is claimed.
 
 LicenseProof is a standalone GenLayer intelligent contract that evaluates
 whether a frozen component manifest is compatible with a frozen release policy
@@ -19,10 +21,11 @@ attribution and notice obligations, copyleft boundaries, network-source
 requirements, proprietary-distribution constraints, or conflicts between a
 license and the declared release policy.
 
-LicenseProof answers:
+LicenseProof answers the narrower question:
 
-> Can these frozen components be used under this frozen release policy, and
-> what obligations or incompatibilities follow?
+> Under the issuer's declared release policy and presented license text, what component-level permissions, conditions, or uncertainties can be classified?
+
+**This is not a verified upstream package-license grant.** The issuer supplies the component identifier, package hash, evidence URL, and policy; their authoritative relationship to a real upstream package is **not independently verified**. This release does **not** certify complete package provenance or cross-component license compatibility. Manifest results aggregate component-level policy outcomes only and MUST NOT be used as a whole-product clearance certificate.
 
 LicenseProof performs policy compatibility adjudication under a declared
 release policy. It is not legal advice.
@@ -64,8 +67,7 @@ patent_condition_present
 evidence_sufficient
 ```
 
-Every field is a strict boolean. The JSON object must contain exactly these
-keys and no others. License text is treated as untrusted data; prompt,
+The deployed v1.0.0 uses exactly these fifteen booleans. The v1.1 candidate adds `applicability_clear`: conditional license facts without established applicability produce `INCONCLUSIVE`. Every field is a strict boolean; the JSON object contains exactly the keys required by the relevant version. License text is treated as untrusted data; prompt,
 role, JSON, contract-call, payment, validator, tool, and document-authority
 instructions inside it are ignored.
 
@@ -102,10 +104,9 @@ INSUFFICIENT_EVIDENCE
 INCONCLUSIVE
 ```
 
-There are 26 public methods. The generated schema and `interface.json` are
-kept in exact parity.
+The deployed v1.0.0 has 26 public methods. The v1.1 candidate has 28 methods, including a successor lineage view and paginated audit events, and extends the semantic vector with `applicability_clear`. The unreleased v1.1 candidate is NOT the deployed contract.
 
-## Verified Studio-dev deployment
+## Verified historical v1.0.0 Studio-dev deployment
 
 The verified deployment is on Studio-dev, chain `61997`:
 
@@ -122,7 +123,7 @@ Source parity:   PASS
 Schema parity:   PASS
 ```
 
-## Live qualification
+## Historical v1.0.0 live qualification (not v1.1 certification)
 
 All three cases used one frozen policy and commit-pinned SPDX evidence from
 `spdx/license-list-data` commit
@@ -184,8 +185,17 @@ python scripts/verify_schema.py
 python scripts/verify_source.py
 ```
 
+## Assurance and submission boundaries
+
+- **Issuer claim, not independent license authority:** HTTPS hash-verified bytes prove content integrity relative to a creator-supplied commitment. SPDX license templates alone never prove that a software publisher granted that license to a particular package.
+- **Policy-relative only:** The manifest result is the deterministic priority of individually reviewed components. Cross-component copyleft, linking, exception, or derivative-work conflicts are outside this version's adjudication.
+- **Conditional terms:** Elastic-2.0 hosted restrictions and AGPL network-source duties have conditions; the three live examples demonstrate selected policy-relative interpretations, not universally applicable legal conclusions.
+- **Freshness:** `observed_at` and `published_at` are self-asserted. v1.1 additionally records chain commit time but does not prove publisher freshness.
+- **Redirects:** Without trusted final-origin metadata, an HTTPS fetch plus SHA256 does not prove a no-redirect authority chain.
+- **Review:** v1.1 permits independent review and finalization of already-frozen manifests; draft composition still belongs to the issuer. A still-draft manifest means **unassessed**, never cleared.
+- **Historical release:** `v1.0.0` remains frozen at its original tag and deployed address. v1.1 code changes require a separate deployment and new live qualification before the candidate may be called submitted-ready.
+
 ## Repository status
 
-LicenseProof v1.0.0 is the first public release of this contract. It contains
-no frontend and performs no deployment or blockchain writes as part of normal
-local testing.
+This branch is a steward-hardening **candidate**, not a deployed successor. Do not claim a v1.1 Studio-dev contract address or use the historical v1.0.0 proof as evidence of v1.1 execution.
+

@@ -24,6 +24,19 @@ jobs:
       - name: Install development dependencies
         run: python -m pip install -r requirements-dev.txt
 
+      - name: Install qualified 5j runner descriptor
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+
+          runner_hash = "5jycge4q8k23462jtb0b9fyey1s9qz928sz2nbrd9mg4sxqg2qng"
+          source = Path("ci/runners/py-genlayer") / runner_hash / "runner.json"
+          target = Path.home() / ".cache/gltest-direct/extracted/local/py-genlayer" / runner_hash / "runner.json"
+          target.parent.mkdir(parents=True, exist_ok=True)
+          target.write_bytes(source.read_bytes())
+          print(f"Installed {runner_hash} at {target}")
+          PY
+
       - name: Run direct, adversarial, property, semantic, and harness tests
         run: >-
           python -m pytest -q tests/direct tests/adversarial tests/property

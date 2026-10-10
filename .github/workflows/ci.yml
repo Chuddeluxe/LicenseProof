@@ -56,9 +56,6 @@ jobs:
       - name: Run complete test suite
         run: python -m pytest -q
 
-      - name: Run mutation audit
-        run: python scripts/mutation_audit.py
-
       - name: Verify schema and ABI parity
         run: python scripts/verify_schema.py
 
@@ -67,6 +64,10 @@ jobs:
 
       - name: Verify read-only checkers did not modify files
         run: git diff --exit-code
+
+      - name: Run mutation audit
+        run: python scripts/mutation_audit.py
+
 
       - name: Secret scan
         shell: bash

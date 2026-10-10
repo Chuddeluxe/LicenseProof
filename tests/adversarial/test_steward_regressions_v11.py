@@ -123,3 +123,26 @@ def test_claimed_evidence_observation_not_trusted(env, policy_args):
     evidence = json.loads(c.get_evidence("e1"))
     assert evidence["observed_at_source"] == "CREATOR_ASSERTED"
     assert evidence["committed_at"]
+
+
+def test_two_individually_positive_components_are_not_whole_bundle_clearance(env, policy_args):
+    vm, c = prepare(env, policy_args)
+    commit(c)
+    second_text = fixture_text("permissive.txt")
+    url = "https://licenses.example.org/text/additional-license.txt"
+    c.add_component("c2", "m1", "second-lib", "1", "SDK", "pkg:second", "b" * 64, "MIT", "e2")
+    c.commit_license_evidence(
+        "e2", "c2", "authority-1", "licenses.example.org", "/text", url,
+        hashlib.sha256(second_text.encode()).hexdigest(), len(second_text.encode()),
+        "", "", "LICENSE_TEXT",
+    )
+    c.freeze_manifest("m1")
+    c.begin_component_review("m1", "c1")
+    mock_license(vm, "https://licenses.example.org/text/mit.txt", second_text, semantic())
+    c.adjudicate_component("m1", "c1")
+    c.begin_component_review("m1", "c2")
+    mock_license(vm, url, second_text, semantic())
+    c.adjudicate_component("m1", "c2")
+    assert json.loads(c.get_component_review("c1"))["final_result"] == "COMPATIBLE"
+    assert json.loads(c.get_component_review("c2"))["final_result"] == "COMPATIBLE"
+    assert c.finalize_manifest("m1") == "INCONCLUSIVE"

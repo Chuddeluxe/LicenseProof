@@ -6,11 +6,14 @@ from __future__ import annotations
 
 import hashlib
 import json
+import sys
 from pathlib import Path
 
-from scripts.studio_live_qualification import Rpc, gen_call_deploy_preflight, QualificationError
-
 ROOT = Path(__file__).resolve().parents[1]
+if str(ROOT) not in sys.path:
+    sys.path.insert(0, str(ROOT))
+
+from scripts.studio_live_qualification import Rpc, gen_call_deploy_preflight, QualificationError
 SOURCE = ROOT / "contracts" / "LicenseProof.py"
 SCHEMA = ROOT / "contracts" / "schema.json"
 HASH = ROOT / "docs" / "SOURCE_HASH.txt"

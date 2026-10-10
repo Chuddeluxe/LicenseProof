@@ -484,6 +484,8 @@ class LiveRun:
             address = resolve_contract_address(self.rpc, deployment_reconciliation["protocol_tx_hash"], deployment_reconciliation)
             self.contract_address = address
             source_match = deployed_source_sha(self.rpc, address)
+            if source_match != EXPECTED_SOURCE_SHA:
+                raise RuntimeError("deployed v1.1 source SHA does not match frozen candidate")
             deployed_schema, _ = self.rpc.call("gen_getContractSchema", [address])
             local_schema_value, local_interface_value = local_schema()
             if deployed_schema != local_schema_value or len(deployed_schema.get("methods", {})) != 28:
@@ -589,6 +591,11 @@ class LiveRun:
                 "liveQualification": "VERIFIED", "readyForPublicRelease": "YES", "deploymentPerformed": "YES", "transactionBroadcast": "YES",
                 "faucetUsed": "NO", "githubCreated": "NO", "pushPerformed": "NO", "verifiedAt": utc_now(),
             }
+            if summary["unexplainedWrites"] != 0:
+                summary["liveQualification"] = "NOT_VERIFIED_NONCE_GAP"
+                summary["readyForPublicRelease"] = "NO"
+                fsync_json(QUALIFICATION_DIR / "summary.json", summary)
+                raise RuntimeError("qualification completed with unexplained sender nonces")
             fsync_json(QUALIFICATION_DIR / "summary.json", summary)
             return summary
         finally:

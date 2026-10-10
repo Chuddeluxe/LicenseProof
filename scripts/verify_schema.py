@@ -1,4 +1,4 @@
-"""Generate and verify the exact local GenVM schema/interface pair."""
+"""Fail-closed read-only comparison of generated GenVM schema and committed ABI."""
 
 from __future__ import annotations
 
@@ -18,15 +18,10 @@ SCHEMA = ROOT / "contracts" / "schema.json"
 INTERFACE = ROOT / "contracts" / "interface.json"
 
 
-def main() -> int:
-    use_cached_5j_runner()
-    vm = VMContext()
-    with vm.activate():
-        deploy_contract(CONTRACT, vm)
-        cls = sys.modules["_contract_LicenseProof"].LicenseProof
-        schema = json.loads(cls.__get_schema__())
-    schema["methods"] = dict(sorted(schema["methods"].items()))
-    interface = {
+def compare_artifacts(derived_schema: dict, committed_schema: dict, committed_interface: dict) -> None:
+    methods = dict(sorted(derived_schema["methods"].items()))
+    expected_schema = {**derived_schema, "methods": methods}
+    expected_interface = {
         "contract": "LicenseProof",
         "schema_source": "schema.json",
         "methods": {
@@ -35,17 +30,33 @@ def main() -> int:
                 "params": info["params"],
                 "ret": info["ret"],
             }
-            for name, info in schema["methods"].items()
+            for name, info in methods.items()
         },
     }
-    SCHEMA.write_text(json.dumps(schema, sort_keys=True, indent=2) + "\n", encoding="utf-8")
-    INTERFACE.write_text(json.dumps(interface, sort_keys=True, indent=2) + "\n", encoding="utf-8")
-    schema_methods = set(schema["methods"])
-    interface_methods = set(interface["methods"])
-    if schema_methods != interface_methods:
-        raise SystemExit("schema/interface method parity failed")
-    print(f"SCHEMA_METHODS={len(schema_methods)}")
+    if committed_schema != expected_schema:
+        raise ValueError("COMMITTED_SCHEMA_MISMATCH")
+    if committed_interface != expected_interface:
+        raise ValueError("COMMITTED_INTERFACE_MISMATCH")
+    if len(methods) != 28:
+        raise ValueError(f"unexpected schema method count {len(methods)}")
+
+
+def main() -> int:
+    use_cached_5j_runner()
+    vm = VMContext()
+    with vm.activate():
+        deploy_contract(CONTRACT, vm)
+        cls = sys.modules["_contract_LicenseProof"].LicenseProof
+        generated = json.loads(cls.__get_schema__())
+    try:
+        committed_schema = json.loads(SCHEMA.read_text(encoding="utf-8"))
+        committed_interface = json.loads(INTERFACE.read_text(encoding="utf-8"))
+        compare_artifacts(generated, committed_schema, committed_interface)
+    except (ValueError, KeyError, TypeError) as exc:
+        raise SystemExit(f"ABI_PARITY=FAIL: {exc}") from exc
+    print("SCHEMA_METHODS=28")
     print("ABI_PARITY=PASS")
+    print("READ_ONLY_SCHEMA_VERIFICATION=PASS")
     return 0
 
 

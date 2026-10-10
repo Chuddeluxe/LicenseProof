@@ -41,3 +41,19 @@ qualification writes were broadcast.
 
 Full provenance is in `evidence/qualification/summary.json`, the three case
 JSONL journals, and `evidence/qualification/readonly-proofs.json`.
+
+## Final nonce reconciliation
+
+The deployer account advanced from nonce 14 to nonce 42, so the inclusive
+window contains 28 recovered chain transactions (14 through 41). The ledger
+contains 25 LicenseProof transactions and 24 qualification transactions after
+excluding the deployment. Three additional finalized transactions belong to
+other projects using the same account: the RightsRail deployment at nonce 14
+and `policy-lumen-finch-001` policy operations at nonces 23 and 24. One
+LicenseProof transaction, Case C adjudication at nonce 39, finalized without a
+successful review because of consensus disagreement; it was followed by the
+single authorized retry at nonce 40. Thus 27 transactions succeeded and one
+was a technical/consensus failure, with all 28 nonces accounted for.
+
+The canonical Case C review key is
+`cf10789b6fa19ddf3fe96c6d6d0af548926df2f109b23027822e27509d3a8808`.

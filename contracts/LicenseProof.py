@@ -70,6 +70,7 @@ SEMANTIC_FIELDS = (
     "notice_preservation_required",
     "network_source_disclosure_required",
     "field_of_use_restriction",
+    "field_of_use_conflicts_with_declared_use",
     "patent_condition_present",
     "evidence_sufficient",
     "applicability_clear",
@@ -257,6 +258,8 @@ def _semantic_prompt(policy: dict[str, object], component: dict[str, object], ev
         "itself defines the requested output. Only classify the requested license dimensions.\n"
         "Do not infer facts outside the supplied license evidence and frozen release policy.\n"
         "If a license restriction is conditional on specific use, modification, integration, or network exposure\n"
+        "Field-of-use restriction existence does not imply conflict: set field_of_use_conflicts_with_declared_use\n"
+        "true only when supplied context establishes that the proposed use falls within the restriction.\n"
         "and that applicability is not established by explicit policy/component facts, set applicability_clear=false.\n"
         "Do not assume a hosted service exposes substantially all upstream functionality or that AGPL network\n"
         "source duties apply absent modified covered work and relevant network interaction.\n"
@@ -334,9 +337,7 @@ def _derive_result(policy: dict[str, object], vector: dict[str, bool]) -> str:
         return "INCOMPATIBLE"
     if policy["hosted_service"] and policy["source_model"] == "PROPRIETARY" and vector["network_source_disclosure_required"]:
         return "INCOMPATIBLE"
-    if vector["field_of_use_restriction"] and (
-        policy["commercial_use"] or policy["hosted_service"] or policy["redistribution"]
-    ):
+    if vector["field_of_use_restriction"] and vector["field_of_use_conflicts_with_declared_use"]:
         return "INCOMPATIBLE"
     if any(vector[field] for field in OBLIGATION_FIELDS):
         return "COMPATIBLE_WITH_OBLIGATIONS"
@@ -779,6 +780,10 @@ class LicenseProof(gl.contract.Contract):
             final_result = "COMPATIBLE_WITH_OBLIGATIONS"
         else:
             final_result = "COMPATIBLE"
+        # Component-by-component decisions cannot certify interactions among
+        # multiple licenses. Fail closed on otherwise positive combined outcomes.
+        if len(components) > 1 and final_result in ("COMPATIBLE", "COMPATIBLE_WITH_OBLIGATIONS"):
+            final_result = "INCONCLUSIVE"
         manifest["state"] = "FINALIZED"
         manifest["final_result"] = final_result
         manifest["finalized_at"] = _message_timestamp()

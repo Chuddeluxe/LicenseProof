@@ -43,6 +43,7 @@ def semantic(**overrides: bool) -> dict[str, bool]:
         "field_of_use_restriction": False,
         "patent_condition_present": False,
         "evidence_sufficient": True,
+        "applicability_clear": True,
     }
     fields.update(overrides)
     return fields

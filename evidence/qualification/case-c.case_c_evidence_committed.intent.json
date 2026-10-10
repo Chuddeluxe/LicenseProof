@@ -1,0 +1,68 @@
+{
+  "arguments": [
+    "LP-LIVE-EVIDENCE-C",
+    "licenseproof-case-c",
+    "spdx/license-list-data/31ba1a50e5397e00a304dbadc76531740e89ee48",
+    "raw.githubusercontent.com",
+    "/spdx/license-list-data/31ba1a50e5397e00a304dbadc76531740e89ee48/text/",
+    "https://raw.githubusercontent.com/spdx/license-list-data/31ba1a50e5397e00a304dbadc76531740e89ee48/text/AGPL-3.0-only.txt",
+    "d8a6cc31abc16b6748c7a21f21611f5a1ec33f67d22ca23d7da1c19b95496bee",
+    34020,
+    "",
+    "",
+    "LICENSE_TEXT"
+  ],
+  "broadcast_count": 1,
+  "canonical_readback": {
+    "authority_host": "raw.githubusercontent.com",
+    "authority_id": "spdx/license-list-data/31ba1a50e5397e00a304dbadc76531740e89ee48",
+    "authority_path_prefix": "/spdx/license-list-data/31ba1a50e5397e00a304dbadc76531740e89ee48/text",
+    "component_id": "licenseproof-case-c",
+    "content_byte_length": 34020,
+    "content_sha256": "d8a6cc31abc16b6748c7a21f21611f5a1ec33f67d22ca23d7da1c19b95496bee",
+    "evidence_id": "LP-LIVE-EVIDENCE-C",
+    "evidence_type": "LICENSE_TEXT",
+    "observed_at": "",
+    "published_at": "",
+    "source_url": "https://raw.githubusercontent.com/spdx/license-list-data/31ba1a50e5397e00a304dbadc76531740e89ee48/text/AGPL-3.0-only.txt"
+  },
+  "chainId": 61997,
+  "consensus_calldata_sha256": "59635c9041568b81fd8dcf2c09393d6f8fa8a7594056b4b1cbc2ff79ca0eb6e9",
+  "contract_address": null,
+  "evm_tx_hash": "0xd3d1a911dc758a0c82ec4730e6f81179255ec5e65e1eaaca9811fc3502bd86bd",
+  "execution_result": null,
+  "feeValue": 100000000000010352,
+  "fee_distribution": {
+    "appealRounds": 0,
+    "executionBudgetPerRound": 25000000000000000,
+    "executionConsumed": 0,
+    "leaderTimeunitsAllocation": 100,
+    "maxPriceGenPerTimeUnit": 2,
+    "receiptFeeMaxGasPrice": 300000000,
+    "rotations": [
+      3
+    ],
+    "storageFeeMaxGasPrice": 300000000,
+    "totalMessageFees": 0,
+    "validatorTimeunitsAllocation": 200
+  },
+  "finality": {
+    "outcome": "accepted",
+    "state": "finalized"
+  },
+  "from": "0x33653E6e86807e41682D3346CDf648D6653384B1",
+  "label": "CASE_C_EVIDENCE_COMMITTED",
+  "method": "commit_license_evidence",
+  "network": "studio-dev",
+  "pre_write_nonce": 36,
+  "predicted_evm_tx_hash": "0xd3d1a911dc758a0c82ec4730e6f81179255ec5e65e1eaaca9811fc3502bd86bd",
+  "protocol_tx_hash": "0xd3d1a911dc758a0c82ec4730e6f81179255ec5e65e1eaaca9811fc3502bd86bd",
+  "raw_transaction_sha256": "73b82296b0c2c036890f1bc788dbac713151ddd8b3d319d96e081c3e8d64c83c",
+  "serialized_deploy_sha256": "50555a6ef8bc5211b2db8eb968328c8f5c017561c7cf1d599655556591ec7930",
+  "source_sha256": "77fb66904787baab72210276f29d6c0cc29831e2d243cecad5c2eb249146c0c4",
+  "status": "reconciled",
+  "successful": true,
+  "timestamp": "2026-10-10T00:26:10.672365Z",
+  "to": "0x27Ca7E9F92AB0e465420AA9F2583fB25c9355619",
+  "value": 0
+}

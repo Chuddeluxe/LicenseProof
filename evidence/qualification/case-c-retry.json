@@ -1,0 +1,61 @@
+{
+  "case": "C",
+  "finalize_tx": "0x8b31387ebcfaf6a57f2e9cd377af173627fd531ccdd454ed75100fc76072ae95",
+  "first_failed_tx": "0x0d253e540f555a8282fb857dbc0906f2e5426d45940f493b4536a9211eb44c92",
+  "manifest": {
+    "component_count": 1,
+    "created_at": "2026-10-10T00:23:51.189410Z",
+    "creator": "0x33653E6e86807e41682D3346CDf648D6653384B1",
+    "final_result": "INCOMPATIBLE",
+    "finalized_at": "2026-10-10T00:33:45.418849Z",
+    "frozen_at": "2026-10-10T00:26:20.282700Z",
+    "manifest_hash": "e54511ee699e7f7e3993206ea2367b5ac17c7dacce5105c9e1b0a7b6c225fce0",
+    "manifest_id": "LP-LIVE-C-20261009T235554Z",
+    "name": "AGPL network-source obligation qualification",
+    "policy_id": "LP-LIVE-POLICY-20261009T235554Z",
+    "release_version": "1.0.0-live-c",
+    "reviewed_component_count": 1,
+    "state": "FINALIZED",
+    "supersedes_manifest_id": ""
+  },
+  "replay_guard": "PASS",
+  "retry_nonce": 40,
+  "retry_tx": "0xe888d147a3b562f64813feb8cf73dbf48d4c5ddfa700eb6d7658b125a883254f",
+  "review": {
+    "component_id": "licenseproof-case-c",
+    "final_result": "INCOMPATIBLE",
+    "manifest_id": "LP-LIVE-C-20261009T235554Z",
+    "review_identity": {
+      "component_id": "licenseproof-case-c",
+      "evidence_id": "LP-LIVE-EVIDENCE-C",
+      "license_sha256": "d8a6cc31abc16b6748c7a21f21611f5a1ec33f67d22ca23d7da1c19b95496bee",
+      "manifest_hash": "e54511ee699e7f7e3993206ea2367b5ac17c7dacce5105c9e1b0a7b6c225fce0",
+      "manifest_id": "LP-LIVE-C-20261009T235554Z",
+      "package_hash": "308b0b6b0ba5f41c1f3235d9b24442f16e5a1965b7743482447a2875f37447b6",
+      "policy_hash": "5186010712e61154134377dc0b566b529cfea5c1a0152c974f8fc2e0fe43a8b0",
+      "policy_id": "LP-LIVE-POLICY-20261009T235554Z",
+      "semantic_schema_version": "licenseproof.semantic.v1"
+    },
+    "review_key": "cf10789b6fa19ddf3fe96c6d6d0af548926df2f109b23027822e27509d3a8808",
+    "semantic_vector": {
+      "attribution_required": true,
+      "commercial_use_permitted": true,
+      "derivative_distribution_permitted": true,
+      "evidence_sufficient": true,
+      "field_of_use_restriction": false,
+      "hosted_service_permitted": true,
+      "modification_permitted": true,
+      "network_source_disclosure_required": true,
+      "notice_preservation_required": true,
+      "patent_condition_present": true,
+      "proprietary_distribution_permitted": false,
+      "redistribution_permitted": true,
+      "same_license_required": true,
+      "source_disclosure_required": true,
+      "sublicensing_permitted": false
+    },
+    "state": "FINALIZED"
+  },
+  "semantic_retries": 1,
+  "timestamp": "2026-10-10T00:34:27.771608Z"
+}

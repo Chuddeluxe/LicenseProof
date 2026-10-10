@@ -1,0 +1,58 @@
+{
+  "arguments": [
+    "LP-LIVE-C-20261009T235554Z",
+    "licenseproof-case-c"
+  ],
+  "broadcast_count": 1,
+  "canonical_readback": {
+    "component_id": "licenseproof-case-c",
+    "component_type": "SOURCE_PACKAGE",
+    "declared_license_id": "AGPL-3.0-only",
+    "license_evidence_id": "LP-LIVE-EVIDENCE-C",
+    "manifest_id": "LP-LIVE-C-20261009T235554Z",
+    "name": "licenseproof-case-c",
+    "package_hash": "308b0b6b0ba5f41c1f3235d9b24442f16e5a1965b7743482447a2875f37447b6",
+    "source_identifier": "spdx:AGPL-3.0-only",
+    "state": "UNREVIEWED",
+    "version": "1.0.0"
+  },
+  "chainId": 61997,
+  "consensus_calldata_sha256": "14c01b910f9e87d5e2881cf0d479f19f2dad71cf88d9e580906341915fb37131",
+  "contract_address": null,
+  "evm_tx_hash": "0x807d8cedce9f559c1cb9c6b285aff61934e07f36e1aeaa852ff33edb866ad811",
+  "execution_result": null,
+  "feeValue": 100000000000010352,
+  "fee_distribution": {
+    "appealRounds": 0,
+    "executionBudgetPerRound": 25000000000000000,
+    "executionConsumed": 0,
+    "leaderTimeunitsAllocation": 100,
+    "maxPriceGenPerTimeUnit": 2,
+    "receiptFeeMaxGasPrice": 300000000,
+    "rotations": [
+      3
+    ],
+    "storageFeeMaxGasPrice": 300000000,
+    "totalMessageFees": 0,
+    "validatorTimeunitsAllocation": 200
+  },
+  "finality": {
+    "outcome": "accepted",
+    "state": "finalized"
+  },
+  "from": "0x33653E6e86807e41682D3346CDf648D6653384B1",
+  "label": "CASE_C_REVIEW_STARTED",
+  "method": "begin_component_review",
+  "network": "studio-dev",
+  "pre_write_nonce": 38,
+  "predicted_evm_tx_hash": "0x807d8cedce9f559c1cb9c6b285aff61934e07f36e1aeaa852ff33edb866ad811",
+  "protocol_tx_hash": "0x807d8cedce9f559c1cb9c6b285aff61934e07f36e1aeaa852ff33edb866ad811",
+  "raw_transaction_sha256": "7b1c4f712de1705c346ea06c373fd381fe2e415d51f12ab53ecd1a8d6e9231e8",
+  "serialized_deploy_sha256": "641cb86c86f0ffa286f7e805e553e22e5d650fb2c6e14d84604241254fa98160",
+  "source_sha256": "77fb66904787baab72210276f29d6c0cc29831e2d243cecad5c2eb249146c0c4",
+  "status": "reconciled",
+  "successful": true,
+  "timestamp": "2026-10-10T00:27:48.892686Z",
+  "to": "0x27Ca7E9F92AB0e465420AA9F2583fB25c9355619",
+  "value": 0
+}

@@ -1,25 +1,43 @@
 # LicenseProof live qualification record
 
-Status: **NOT QUALIFIED.**
+Status: VERIFIED on Studio-dev.
 
-The qualification run stopped at deployment execution failure. The single
-qualification policy was not created, and no live policy, manifest, component,
-license evidence, review, or final-result write was broadcast.
+One frozen policy was used for all three approved cases:
 
-The three approved cases therefore remain unqualified:
+- Policy ID: `LP-LIVE-POLICY-20261009T235554Z`
+- Policy hash: `5186010712e61154134377dc0b566b529cfea5c1a0152c974f8fc2e0fe43a8b0`
+- State: FROZEN
+- Intent: commercial hosted proprietary SaaS with modification enabled
 
-| Case | Evidence fetched locally | On-chain evidence committed | Result |
+Pinned SPDX evidence used commit
+`31ba1a50e5397e00a304dbadc76531740e89ee48`. Each source was fetched twice,
+decoded as UTF-8, and matched its committed SHA-256 and byte length.
+
+| Case | Manifest | Semantic result | Manifest result |
 | --- | --- | --- | --- |
-| A — MIT | Yes | No | NOT RUN |
-| B — Elastic-2.0 | Yes | No | NOT RUN |
-| C — AGPL-3.0-only | Yes | No | NOT RUN |
+| A - MIT | `LP-LIVE-A-20261009T235554Z` | COMPATIBLE_WITH_OBLIGATIONS | COMPATIBLE_WITH_OBLIGATIONS |
+| B - Elastic-2.0 | `LP-LIVE-B-20261009T235554Z` | INCOMPATIBLE | INCOMPATIBLE |
+| C - AGPL-3.0-only | `LP-LIVE-C-20261009T235554Z` | INCOMPATIBLE | INCOMPATIBLE |
 
-Pinned SPDX provenance was resolved at commit
-`31ba1a50e5397e00a304dbadc76531740e89ee48` and each license was fetched twice
-with identical bytes. The exact URL, SHA-256, and byte length records are in
-`evidence/qualification/spdx-provenance.json`.
+Case A recognized commercial use, hosted service, and modification as
+permitted, with attribution and notice preservation obligations.
 
-There are no live replay-guard, policy-immutability, manifest-immutability, or
-semantic-result claims because no qualification contract existed to read back.
-Technical deployment failure is kept separate from business compatibility
-results; no case is reported as compatible or incompatible.
+Case B recognized `hosted_service_permitted=false`; the deterministic policy
+rule derived INCOMPATIBLE.
+
+Case C recognized `network_source_disclosure_required=true`; the frozen
+proprietary hosted-only policy therefore derived INCOMPATIBLE.
+
+Case C had one finalized but undetermined consensus attempt at nonce 39 due to
+validator disagreement. The canonical review was absent, the frozen identity
+was unchanged, and the single authorized semantic retry at nonce 40 succeeded.
+The failed attempt remains preserved and was never treated as a business
+verdict.
+
+Read-only replay simulations rejected duplicate adjudication for all three
+cases. Read-only mutation simulations rejected frozen-policy mutation,
+adding to a finalized manifest, and repeat finalization. No duplicate
+qualification writes were broadcast.
+
+Full provenance is in `evidence/qualification/summary.json`, the three case
+JSONL journals, and `evidence/qualification/readonly-proofs.json`.

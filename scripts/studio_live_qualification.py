@@ -361,6 +361,18 @@ def serialized_call(method: str | None, args: list[Any] | None = None) -> tuple[
     return serialized, sha256_bytes(bytes.fromhex(serialized[2:]))
 
 
+def serialized_read_call(method: str | None, args: list[Any] | None = None) -> tuple[str, str]:
+    """Encode a read exactly as genlayer-py 0.19.0rc2 does.
+
+    The RC read path uses a literal zero byte for the read-only marker.  A
+    Python ``False`` would be CBOR-encoded as ``0x80`` by ``serialize`` and
+    Studio-dev rejects that entry as ``malformed_entry``.
+    """
+    encoded = calldata.encode(make_calldata_object(method=method, args=args, kwargs=None))
+    serialized = serialize([encoded, bytes([0])])
+    return serialized, sha256_bytes(bytes.fromhex(serialized[2:]))
+
+
 def serialized_deploy(source: str) -> tuple[str, str]:
     constructor = calldata.encode(make_calldata_object(method=None, args=None, kwargs=None))
     serialized = serialize([source, constructor, False])
@@ -460,6 +472,8 @@ def semantic_candidates(result: Any) -> list[Any]:
             values = result.get(key)
             if isinstance(values, list):
                 candidates.extend(values)
+            elif isinstance(values, dict):
+                candidates.extend(values.values())
         for key in ("data", "result"):
             if key in result:
                 candidates.append(result[key])
@@ -469,6 +483,14 @@ def semantic_candidates(result: Any) -> list[Any]:
     for candidate in candidates:
         if isinstance(candidate, str) and re.fullmatch(r"(?:0x)?[0-9a-fA-F]+", candidate):
             decoded.append(decode_calldata_value(candidate))
+        elif isinstance(candidate, str):
+            try:
+                raw = base64.b64decode(candidate, validate=True)
+                if raw.startswith(b"\x00"):
+                    raw = raw[1:]
+                decoded.append(calldata.decode(raw))
+            except Exception:
+                decoded.append(candidate)
         else:
             decoded.append(candidate)
     return decoded
@@ -491,7 +513,7 @@ def gen_call_write_preflight(rpc: Rpc, address: str, method: str, args: list[Any
 
 
 def gen_call_read(rpc: Rpc, address: str, method: str, args: list[Any] | None = None) -> Any:
-    data, _ = serialized_call(method, args or [])
+    data, _ = serialized_read_call(method, args or [])
     result, envelope = rpc.call(
         "gen_call",
         [{"type": "read", "to": address, "from": DEPLOYER, "data": data, "status": "finalized"}],

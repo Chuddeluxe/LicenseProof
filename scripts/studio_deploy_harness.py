@@ -299,6 +299,67 @@ def build_signed_request(
     )
 
 
+def build_signed_call_request(
+    client: GenLayerClient,
+    address: str,
+    function_name: str,
+    args: list[Any],
+    account: Any,
+    fees: ProvenFeeProfile,
+    value: int = 0,
+) -> tuple[dict[str, Any], str]:
+    """Build/sign a typed contract write without submitting it."""
+    client.initialize_consensus_smart_contract()
+    transaction_fees = _resolve_transaction_fees(
+        self=client,
+        fees=fees.sdk_options(),
+        num_of_initial_validators=client.chain.default_number_of_initial_validators,
+    )
+    call_bytes = calldata.encode(make_calldata_object(method=function_name, args=args, kwargs=None))
+    serialized_data = serialize([call_bytes, False])
+    encoded_data = _encode_add_transaction_data(
+        self=client,
+        sender_account=account,
+        recipient=Web3.to_checksum_address(address),
+        consensus_max_rotations=3,
+        data=serialized_data,
+        valid_until=None,
+        user_value=value,
+        transaction_fees=transaction_fees,
+    )
+    transaction = _prepare_transaction(
+        self=client,
+        sender=account.address,
+        recipient=client.chain.consensus_main_contract["address"],
+        data=encoded_data,
+        value=value + (transaction_fees["fee_value"] or 0),
+    )
+    signed = account.sign_transaction(transaction)
+    raw_hex = client.w3.to_hex(signed.raw_transaction)
+    raw_bytes = bytes.fromhex(raw_hex[2:])
+    return (
+        {
+            "network": NETWORK,
+            "chainId": CHAIN_ID,
+            "rpc": RPC,
+            "sender": account.address,
+            "nonce": int(transaction["nonce"], 16),
+            "to": Web3.to_checksum_address(address),
+            "functionName": function_name,
+            "args": args,
+            "value": value,
+            "source_sha256": EXPECTED_SOURCE_SHA,
+            "runner": RUNNER,
+            "serialized_deploy_sha256": sha256_bytes(bytes.fromhex(serialized_data[2:])),
+            "consensus_calldata_sha256": sha256_bytes(bytes.fromhex(encoded_data[2:])),
+            "fees": fees.as_json(),
+            "transaction": json_safe(transaction),
+            "raw_transaction_sha256": sha256_bytes(raw_bytes),
+        },
+        raw_hex,
+    )
+
+
 def raw_transaction_hash(raw_hex: str) -> str:
     """Return the EVM hash that the provider should return for raw_hex."""
     from eth_utils import keccak
@@ -379,12 +440,15 @@ class OneShotDeploymentSender:
         intent = {
             "status": "broadcast_intent",
             "broadcast_count": 0,
-            "label": "LICENSEPROOF_DEPLOYMENT",
-            "method": "deploy",
+            "label": request.get("label", "LICENSEPROOF_DEPLOYMENT"),
+            "method": request.get("method", request.get("functionName", "deploy")),
+            "arguments": request.get("args", []),
             "from": request["sender"],
             "network": request["network"],
             "chainId": request["chainId"],
             "pre_write_nonce": request["nonce"],
+            "to": request.get("to"),
+            "value": request.get("value", 0),
             "source_sha256": request["source_sha256"],
             "serialized_deploy_sha256": request["serialized_deploy_sha256"],
             "consensus_calldata_sha256": request["consensus_calldata_sha256"],
@@ -489,7 +553,8 @@ class OneShotDeploymentSender:
             fsync_json(self.intent_path, terminal)
             append_jsonl(self.journal_path, {**terminal, "phase": "terminal_execution_error"})
             raise DeploymentSafetyError("deployment finalized without successful execution; do not rebroadcast")
-        canonical = readback(address) if readback is not None and address is not None else None
+        readback_target = address or intent.get("to")
+        canonical = readback(readback_target) if readback is not None and isinstance(readback_target, str) else None
         settled = {**protocol_persisted, "status": "reconciled", **result, "canonical_readback": json_safe(canonical), "timestamp": utc_now()}
         fsync_json(self.intent_path, settled)
         append_jsonl(self.journal_path, {**settled, "phase": "reconciled"})

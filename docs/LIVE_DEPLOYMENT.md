@@ -1,34 +1,41 @@
 # LicenseProof Studio-dev deployment record
 
-Status: **BLOCKED — deployment execution failed.**
+Status: SUCCESSFUL on Studio-dev chain 61997.
 
-The frozen source was preflighted successfully against Studio-dev (chain 61997):
-remote source schema 26/26, local schema/interface parity, and read-only
-`gen_call` deploy simulation `00`. The actual deployment did not satisfy the
-success criteria.
+The exact frozen contract source was deployed once with the proven Studio-dev
+5jyc fee profile.
 
-Captured transaction:
+- Contract: `0x27Ca7E9F92AB0e465420AA9F2583fB25c9355619`
+- Deployment transaction: `0xa3eeeb8156ee3b6317b77beeb73ba7d3196b0f4d30830ef0de97c82f4407de03`
+- Deployer nonce: 15
+- Finality: FINALIZED / ACCEPTED
+- Execution: SUCCESS
+- Source SHA-256: `77fb66904787baab72210276f29d6c0cc29831e2d243cecad5c2eb249146c0c4`
+- Deployed source SHA-256: exact match
+- Deployed schema: 26 methods, exact local schema/interface parity
+- Contract info: version `1.0.0`, semantic schema `licenseproof.semantic.v1`
 
-- Hash: `0xc1d73935470d50f78338aea2fe4c151f1d4baffd98f60575a5c95fb59c99a799`
-- Nonce: 12
-- Finality: `FINALIZED`, outcome `accepted`
-- Execution: `ERROR` / CLI `FINISHED_WITH_ERROR`
-- Node detail: `out_of receipt nondet_output`; validator quorum was reached
-- Observed transaction data contract address: `0x665F21cD9c8e0d12aAa2773840293152CBEC7C54`
+Deployment profile:
 
-The observed address is not treated as a deployed LicenseProof contract because
-execution failed. No contract readback, policy write, manifest write, evidence
-commit, semantic adjudication, or qualification write was attempted.
+```text
+leaderTimeunitsAllocation=100
+validatorTimeunitsAllocation=200
+appealRounds=0
+executionBudgetPerRound=25000000000000000
+executionConsumed=0
+totalMessageFees=0
+rotations=[3]
+maxPriceGenPerTimeUnit=2
+storageFeeMaxGasPrice=300000000
+receiptFeeMaxGasPrice=300000000
+feeValue=100000000000010352
+```
 
-The first corrected CLI invocation exited after emitting a deployment result but
-before the harness captured its multiline hash. The account nonce moved from the
-preflight value 11 to 13, while the captured transaction is nonce 12. Therefore
-one earlier deployment transaction (inferred nonce 11) is unexplained and its
-hash could not be recovered from the exposed RPC history. This is recorded as a
-release blocker; no further reconciliation or deployment was attempted.
+The durable deployment intent was fsynced before the single broadcast, and the
+returned hash was persisted before reconciliation. No CLI stdout parsing was
+used and no second deployment was attempted.
 
-Raw transaction and reconciliation evidence is preserved in
-`evidence/qualification/deployment.jsonl` and
-`evidence/qualification/deployment-failure.json`.
-
-No redeployment is authorized or performed after the terminal failure.
+Historical failed deployment evidence remains preserved in
+`evidence/qualification/deployment-failure.json` and the append-only
+`evidence/qualification/deployment.jsonl`. Those earlier failures used a
+minimal receipt budget and are not part of this successful deployment.

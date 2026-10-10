@@ -1,0 +1,61 @@
+{
+  "arguments": [
+    "LP-LIVE-C-20261009T235554Z"
+  ],
+  "broadcast_count": 1,
+  "canonical_readback": {
+    "component_count": 1,
+    "created_at": "2026-10-10T00:23:51.189410Z",
+    "creator": "0x33653E6e86807e41682D3346CDf648D6653384B1",
+    "final_result": "INCOMPATIBLE",
+    "finalized_at": "2026-10-10T00:33:45.418849Z",
+    "frozen_at": "2026-10-10T00:26:20.282700Z",
+    "manifest_hash": "e54511ee699e7f7e3993206ea2367b5ac17c7dacce5105c9e1b0a7b6c225fce0",
+    "manifest_id": "LP-LIVE-C-20261009T235554Z",
+    "name": "AGPL network-source obligation qualification",
+    "policy_id": "LP-LIVE-POLICY-20261009T235554Z",
+    "release_version": "1.0.0-live-c",
+    "reviewed_component_count": 1,
+    "state": "FINALIZED",
+    "supersedes_manifest_id": ""
+  },
+  "chainId": 61997,
+  "consensus_calldata_sha256": "2cd3f73177b7ce38498c1f96246953f00e9f504e6e86dbd9397dd3a63cd4bd39",
+  "contract_address": null,
+  "evm_tx_hash": "0x8b31387ebcfaf6a57f2e9cd377af173627fd531ccdd454ed75100fc76072ae95",
+  "execution_result": null,
+  "feeValue": 100000000000010352,
+  "fee_distribution": {
+    "appealRounds": 0,
+    "executionBudgetPerRound": 25000000000000000,
+    "executionConsumed": 0,
+    "leaderTimeunitsAllocation": 100,
+    "maxPriceGenPerTimeUnit": 2,
+    "receiptFeeMaxGasPrice": 300000000,
+    "rotations": [
+      3
+    ],
+    "storageFeeMaxGasPrice": 300000000,
+    "totalMessageFees": 0,
+    "validatorTimeunitsAllocation": 200
+  },
+  "finality": {
+    "outcome": "accepted",
+    "state": "finalized"
+  },
+  "from": "0x33653E6e86807e41682D3346CDf648D6653384B1",
+  "label": "CASE_C_MANIFEST_FINALIZED",
+  "method": "finalize_manifest",
+  "network": "studio-dev",
+  "pre_write_nonce": 41,
+  "predicted_evm_tx_hash": "0x8b31387ebcfaf6a57f2e9cd377af173627fd531ccdd454ed75100fc76072ae95",
+  "protocol_tx_hash": "0x8b31387ebcfaf6a57f2e9cd377af173627fd531ccdd454ed75100fc76072ae95",
+  "raw_transaction_sha256": "0d45c05a86008ee0ed7888e5ffe492e931dd8ad076a5c36a48196e3cfbb816a5",
+  "serialized_deploy_sha256": "ca608f51f2ac3bcb203dc2755c8a86cb3fb95f26d8dee7d267ff67a7ffb2f7ae",
+  "source_sha256": "77fb66904787baab72210276f29d6c0cc29831e2d243cecad5c2eb249146c0c4",
+  "status": "reconciled",
+  "successful": true,
+  "timestamp": "2026-10-10T00:34:26.231103Z",
+  "to": "0x27Ca7E9F92AB0e465420AA9F2583fB25c9355619",
+  "value": 0
+}

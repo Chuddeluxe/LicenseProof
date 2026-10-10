@@ -1,0 +1,17 @@
+{
+  "network": "studio-dev",
+  "chainId": 61997,
+  "contract": "0x27Ca7E9F92AB0e465420AA9F2583fB25c9355619",
+  "replayGuards": {
+    "caseA": "PASS; read-only semantic simulation rejected after canonical review",
+    "caseB": "PASS; read-only semantic simulation rejected after canonical review",
+    "caseC": "PASS; read-only semantic simulation rejected after canonical review"
+  },
+  "immutability": {
+    "freezeFrozenPolicy": "PASS; read-only write simulation rejected",
+    "addToFinalizedManifest": "PASS; read-only write simulation rejected",
+    "finalizeFinalizedManifest": "PASS; read-only write simulation rejected"
+  },
+  "broadcasts": 0,
+  "transactionBroadcast": "NO"
+}

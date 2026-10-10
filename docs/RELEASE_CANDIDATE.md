@@ -9,28 +9,55 @@
 - Semantic schema: `licenseproof.semantic.v1`
 - Public methods: 26
 
-The contract source was not modified during the live pass.
+The contract source remained byte-identical throughout deployment and live
+qualification.
+
+## Runtime and deployment
+
+Studio-dev chain identity was verified as 61997. The corrected deployment
+used the proven full fee profile from the qualified 5jyc deployments, finalized
+successfully, and returned contract address
+`0x27Ca7E9F92AB0e465420AA9F2583fB25c9355619`.
+
+The direct SDK harness persists a pre-broadcast intent, signs and broadcasts
+once, fsyncs the returned hash immediately, reconciles that same hash, and
+stops on terminal failure. It does not parse CLI stdout and has no automatic
+deployment retry.
+
+## Qualification
+
+The live MIT, Elastic-2.0, and AGPL-3.0-only cases were finalized with the
+expected results. One Case C consensus disagreement was retried once under
+the frozen identity and liveness rule. The failed transaction and retry are
+both retained in the case journal.
 
 ## Gates
 
-Local direct, adversarial, property, semantic, and mutation tests passed:
-53 tests passed and 24/24 named mutants were killed. Local schema/interface
-parity passed. The Studio-dev read-only source-schema probe passed 26/26 and
-the read-only deploy simulation returned `00`.
+- Full local suite: 63 passed
+- Harness suite: 10 passed
+- Direct: 9 passed
+- Adversarial: 16 passed
+- Property: 4 passed
+- Semantic: 5 passed
+- Mutation audit: 24/24 killed
+- Schema/interface parity: PASS
+- Deployed source parity: PASS
+- Secret scan: PASS; no material secret, only the expected WinCred symbol
+- Current audit: Critical 0, High 0, Medium 0, Low 0
 
-The actual deployment finalized with execution error, so deployed source parity,
-deployed contract information, live policy qualification, replay guards, and
-public-release readiness are not established.
+The installed `genvm-linter` is 0.11.1rc2. Its direct invocation reports the
+two known E010 call-graph false positives around the bounded nondeterministic
+evaluation boundary; no new linter diagnostic was introduced.
 
-The RC linter reports E010 at the two bounded `gl.nondet` call sites. This is a
-known static call-graph false positive for the qualified GenLayer runtime
-boundary; it was recorded and not suppressed by changing the contract.
+The earlier default-fee preflight failure, HTTP 429 preflight interruption,
+and Case C consensus disagreement are preserved as operational history and
+are not current release blockers.
 
 ## Decision
 
-`LIVE_QUALIFICATION = NOT VERIFIED`
+`LIVE_QUALIFICATION = VERIFIED`
 
-`READY_FOR_PUBLIC_RELEASE = NO`
+`READY_FOR_PUBLIC_RELEASE = YES`
 
-The terminal deployment failure and one unreconciled earlier nonce are blockers.
-No automatic retry or redeployment is permitted by the live authorization.
+This is a local provenance checkpoint only. No GitHub repository was created,
+no push was performed, and no further deployment is authorized by this record.

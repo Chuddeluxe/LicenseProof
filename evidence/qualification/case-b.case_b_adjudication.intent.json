@@ -1,0 +1,81 @@
+{
+  "arguments": [
+    "LP-LIVE-B-20261009T235554Z",
+    "licenseproof-case-b"
+  ],
+  "broadcast_count": 1,
+  "canonical_readback": {
+    "component_id": "licenseproof-case-b",
+    "final_result": "INCOMPATIBLE",
+    "manifest_id": "LP-LIVE-B-20261009T235554Z",
+    "review_identity": {
+      "component_id": "licenseproof-case-b",
+      "evidence_id": "LP-LIVE-EVIDENCE-B",
+      "license_sha256": "6448026f2e06ab3da9ed8ddda686694bba37179e88db92dea6d4aab516c957ea",
+      "manifest_hash": "4a7c474d04952a86f244365e5fd365ff1725bdda180c4b6dcee53d2ffce41d00",
+      "manifest_id": "LP-LIVE-B-20261009T235554Z",
+      "package_hash": "bfcd1033c64f818558c600b4ae05bef7ac0e2b29c7510bd9efdbadf570ce2da9",
+      "policy_hash": "5186010712e61154134377dc0b566b529cfea5c1a0152c974f8fc2e0fe43a8b0",
+      "policy_id": "LP-LIVE-POLICY-20261009T235554Z",
+      "semantic_schema_version": "licenseproof.semantic.v1"
+    },
+    "review_key": "40820945d79fbbd79473215da1eaac270dd7832421f5092afd71b764b0e6cb95",
+    "semantic_vector": {
+      "attribution_required": true,
+      "commercial_use_permitted": true,
+      "derivative_distribution_permitted": true,
+      "evidence_sufficient": true,
+      "field_of_use_restriction": true,
+      "hosted_service_permitted": false,
+      "modification_permitted": true,
+      "network_source_disclosure_required": false,
+      "notice_preservation_required": true,
+      "patent_condition_present": true,
+      "proprietary_distribution_permitted": true,
+      "redistribution_permitted": true,
+      "same_license_required": false,
+      "source_disclosure_required": false,
+      "sublicensing_permitted": false
+    },
+    "state": "FINALIZED"
+  },
+  "chainId": 61997,
+  "consensus_calldata_sha256": "3e50a85a5b6dc457f137ff037bc78ac8305ce52a55bfc9114b1ddd6c6fe569e1",
+  "contract_address": null,
+  "evm_tx_hash": "0xbe6f18e0ab0d1df67f96c4762eeedc077cfb1816291b34bb7db57d5ae8ccf2c6",
+  "execution_result": null,
+  "feeValue": 100000000000010352,
+  "fee_distribution": {
+    "appealRounds": 0,
+    "executionBudgetPerRound": 25000000000000000,
+    "executionConsumed": 0,
+    "leaderTimeunitsAllocation": 100,
+    "maxPriceGenPerTimeUnit": 2,
+    "receiptFeeMaxGasPrice": 300000000,
+    "rotations": [
+      3
+    ],
+    "storageFeeMaxGasPrice": 300000000,
+    "totalMessageFees": 0,
+    "validatorTimeunitsAllocation": 200
+  },
+  "finality": {
+    "outcome": "accepted",
+    "state": "finalized"
+  },
+  "from": "0x33653E6e86807e41682D3346CDf648D6653384B1",
+  "label": "CASE_B_ADJUDICATION",
+  "method": "adjudicate_component",
+  "network": "studio-dev",
+  "pre_write_nonce": 32,
+  "predicted_evm_tx_hash": "0xbe6f18e0ab0d1df67f96c4762eeedc077cfb1816291b34bb7db57d5ae8ccf2c6",
+  "protocol_tx_hash": "0xbe6f18e0ab0d1df67f96c4762eeedc077cfb1816291b34bb7db57d5ae8ccf2c6",
+  "raw_transaction_sha256": "b3e2a3ab36683f9068ccbbd1af030eaa0ed42a7dde80f890bc05631c471187ed",
+  "serialized_deploy_sha256": "c607a121df67d3b9407813910afc53acecd72d3bba011d04943e8573a01a3daa",
+  "source_sha256": "77fb66904787baab72210276f29d6c0cc29831e2d243cecad5c2eb249146c0c4",
+  "status": "reconciled",
+  "successful": true,
+  "timestamp": "2026-10-10T00:22:33.251912Z",
+  "to": "0x27Ca7E9F92AB0e465420AA9F2583fB25c9355619",
+  "value": 0
+}

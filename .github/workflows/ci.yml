@@ -65,7 +65,7 @@ jobs:
         run: python scripts/verify_source.py
 
       - name: Read-only Studio-dev v1.1 schema and deploy preflight
-        run: python scripts/verify_studio_v11.py
+        run: python -m scripts.verify_studio_v11
 
       - name: Verify read-only checkers did not modify files
         run: git diff --exit-code

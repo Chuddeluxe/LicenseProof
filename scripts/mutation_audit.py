@@ -126,6 +126,26 @@ MUTANTS = (
         ('_require(evidence_id not in self.evidence_records, "duplicate evidence_id")', '_require(True, "duplicate evidence_id")'),
         ('_require(manifest["state"] == "DRAFT", "evidence is immutable after manifest freeze")', '_require(manifest["state"] in ("DRAFT", "FROZEN"), "evidence is immutable after manifest freeze")'),
     )),
+    Mutant("allow_cross_issuer_supersession_claim", ((
+        '_require(old["creator"] == _actor(), "only predecessor creator may claim supersession")',
+        '_require(True, "only predecessor creator may claim supersession")',
+    ),)),
+    Mutant("allow_repeat_review_start", ((
+        '_require(not self.review_started.get(component_id, False), "review already started")',
+        '_require(True, "review already started")',
+    ),)),
+    Mutant("suppress_inconclusive_uncertainty", ((
+        'if not vector["applicability_clear"]:',
+        'if False:',
+    ),)),
+    Mutant("certify_unverified_multi_component_bundle", ((
+        'if len(components) > 1 and final_result in ("COMPATIBLE", "COMPATIBLE_WITH_OBLIGATIONS"):',
+        'if False:',
+    ),)),
+    Mutant("treat_any_field_use_restriction_as_conflict", ((
+        'if vector["field_of_use_restriction"] and vector["field_of_use_conflicts_with_declared_use"]:',
+        'if vector["field_of_use_restriction"]:',
+    ),)),
     Mutant("allow_finalized_manifest_overwrite", ((
         '_require(manifest["state"] in ("FROZEN", "REVIEWING"), "manifest is not finalizable")',
         '_require(manifest["state"] in ("FROZEN", "REVIEWING", "FINALIZED"), "manifest is not finalizable")',

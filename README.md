@@ -214,13 +214,15 @@ prompt-injection adversarial tests, Hypothesis property tests, semantic harness
 tests, deployment-safety tests, schema/interface parity, source verification,
 secret scanning, and a named mutation audit.
 
-Current verified results:
+Current v1.1.0 verified results on exact-main CI run `38048824819`:
 
 ```text
-Full tests:       63 passed
-Harness tests:    10 passed
-Mutation audit:   24/24 killed
-ABI parity:       PASS
+Full tests:       83 passed
+Focused suites:   60 passed
+Mutation audit:   29/29 killed
+ABI/schema:       28/28 PASS
+Studio-dev schema/preflight: PASS
+Gitleaks:         PASS
 Secret scan:      PASS
 Current audit:    Critical 0 / High 0 / Medium 0
 ```
@@ -242,7 +244,7 @@ python scripts/verify_source.py
 - **Freshness:** `observed_at` and `published_at` are self-asserted. v1.1 additionally records chain commit time but does not prove publisher freshness.
 - **Redirects:** Without trusted final-origin metadata, an HTTPS fetch plus SHA256 does not prove a no-redirect authority chain.
 - **Review:** v1.1 permits independent review and finalization of already-frozen manifests; draft composition still belongs to the issuer. A still-draft manifest means **unassessed**, never cleared.
-- **Historical release:** `v1.0.0` remains frozen at its original tag and deployed address. v1.1 code changes require a separate deployment and new live qualification before the candidate may be called submitted-ready.
+- **Historical release:** `v1.0.0` remains frozen at its original tag and deployed address. v1.1.0 has its own separate deployed contract, live qualification, exact-main CI, and release proof; those v1.1 records must be used for submission.
 
 ## Repository status
 

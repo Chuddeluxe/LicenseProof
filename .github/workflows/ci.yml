@@ -28,6 +28,7 @@ jobs:
         run: |
           python - <<'PY'
           from pathlib import Path
+          import zipfile
 
           runner_hash = "5jycge4q8k23462jtb0b9fyey1s9qz928sz2nbrd9mg4sxqg2qng"
           source = Path("ci/runners/py-genlayer") / runner_hash / "runner.json"
@@ -35,6 +36,14 @@ jobs:
           target.parent.mkdir(parents=True, exist_ok=True)
           target.write_bytes(source.read_bytes())
           print(f"Installed {runner_hash} at {target}")
+
+          std_hash = "kzr02ndm9et4qkmbqpq5djjt5sme2yt76n7sz1qbzax0knt6mam0"
+          archive = Path("ci/runners/py-lib-genlayer-std") / std_hash / "runner.zip"
+          std_target = Path.home() / ".cache/gltest-direct/extracted/local/py-lib-genlayer-std" / std_hash
+          std_target.mkdir(parents=True, exist_ok=True)
+          with zipfile.ZipFile(archive) as payload:
+              payload.extractall(std_target)
+          print(f"Installed {std_hash} at {std_target}")
           PY
 
       - name: Run direct, adversarial, property, semantic, and harness tests

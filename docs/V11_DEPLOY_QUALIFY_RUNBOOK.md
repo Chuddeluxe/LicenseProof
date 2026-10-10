@@ -60,4 +60,4 @@ The earlier v1.0.0 results and CI may be cited as **historical**, but never rela
 
 Only after successful v1.1 deployment and new live qualification: commit the receipts and truthful readbacks, verify local and GitHub source parity, all CI/tests/mutations/secret scans, exact-HEAD `main` and protected merge, publish `v1.1.0`, then prepare GenLayer Portal fields containing the **new** contract address and actual proof. The Portal submission is not complete until it returns authenticated submission confirmation.
 
-No step in this runbook constitutes an on-chain broadcast or Portal submission.
+This document is not an approval or submission receipt. **The guarded `--execute` command broadcasts paid chain transactions if its separate authorization condition is satisfied**; never run it merely for testing or inspection.

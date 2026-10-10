@@ -41,6 +41,7 @@ def semantic(**overrides: bool) -> dict[str, bool]:
         "notice_preservation_required": False,
         "network_source_disclosure_required": False,
         "field_of_use_restriction": False,
+        "field_of_use_conflicts_with_declared_use": False,
         "patent_condition_present": False,
         "evidence_sufficient": True,
         "applicability_clear": True,

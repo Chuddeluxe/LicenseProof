@@ -34,7 +34,12 @@ def compare_artifacts(derived_schema: dict, committed_schema: dict, committed_in
         },
     }
     if committed_schema != expected_schema:
-        raise ValueError("COMMITTED_SCHEMA_MISMATCH")
+        for name in sorted(set(expected_schema["methods"]) | set(committed_schema.get("methods", {}))):
+            expected = expected_schema["methods"].get(name)
+            actual = committed_schema.get("methods", {}).get(name)
+            if expected != actual:
+                raise ValueError(f"COMMITTED_SCHEMA_MISMATCH method={name} expected={expected!r} actual={actual!r}")
+        raise ValueError("COMMITTED_SCHEMA_MISMATCH metadata")
     if committed_interface != expected_interface:
         raise ValueError("COMMITTED_INTERFACE_MISMATCH")
     if len(methods) != 28:

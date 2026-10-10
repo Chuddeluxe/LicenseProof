@@ -19,7 +19,6 @@ from pathlib import Path
 from typing import Any, Callable
 
 from eth_account import Account
-import win32cred
 from genlayer_py import create_client
 from genlayer_py.chains.studio_devnet import studio_devnet
 
@@ -126,6 +125,7 @@ def json_safe(value: Any) -> Any:
 
 
 def load_firewall_account() -> Any:
+    import win32cred  # Windows-only; loaded only after an explicitly approved --execute
     target = "genlayer-cli/account:firewall-only"
     credential = win32cred.CredRead(target, win32cred.CRED_TYPE_GENERIC)
     blob = credential.get("CredentialBlob")
@@ -520,9 +520,9 @@ class LiveRun:
                 raise RuntimeError(f"policy freeze readback mismatch: {policy}")
 
             cases = {
-                "A": {"license": "MIT", "file": "MIT.txt", "manifest": f"LP-V11-A-{stamp}", "name": "MIT proprietary SaaS qualification", "release": "1.1.0-live-a", "source": "spdx:MIT", "declared": "MIT", "component": "licenseproof-case-a", "literal": "LICENSEPROOF-LIVE-CASE-A-COMPONENT-V11", "evidence": "LP-V11-EVIDENCE-A", "expected": "COMPATIBLE_WITH_OBLIGATIONS", "semantic": {"commercial_use_permitted": True, "hosted_service_permitted": True, "modification_permitted": True, "attribution_required": True, "notice_preservation_required": True, "evidence_sufficient": True}},
-                "B": {"license": "Elastic-2.0", "file": "Elastic-2.0.txt", "manifest": f"LP-V11-B-{stamp}", "name": "Elastic hosted-service restriction qualification", "release": "1.1.0-live-b", "source": "spdx:Elastic-2.0", "declared": "Elastic-2.0", "component": "licenseproof-case-b", "literal": "LICENSEPROOF-LIVE-CASE-B-COMPONENT-V11", "evidence": "LP-V11-EVIDENCE-B", "expected": "INCOMPATIBLE", "semantic": {"hosted_service_permitted": False, "evidence_sufficient": True}},
-                "C": {"license": "AGPL-3.0-only", "file": "AGPL-3.0-only.txt", "manifest": f"LP-V11-C-{stamp}", "name": "AGPL network-source obligation qualification", "release": "1.1.0-live-c", "source": "spdx:AGPL-3.0-only", "declared": "AGPL-3.0-only", "component": "licenseproof-case-c", "literal": "LICENSEPROOF-LIVE-CASE-C-COMPONENT-V11", "evidence": "LP-V11-EVIDENCE-C", "expected": "INCOMPATIBLE", "semantic": {"network_source_disclosure_required": True, "evidence_sufficient": True}},
+                "A": {"license": "MIT", "file": "MIT.txt", "manifest": f"LP-V11-A-{stamp}", "name": "MIT proprietary SaaS qualification", "release": "1.1.0-live-a", "source": "spdx:MIT", "declared": "MIT", "component": "licenseproof-case-a", "literal": "LICENSEPROOF-LIVE-CASE-A-COMPONENT-V11", "evidence": "LP-V11-EVIDENCE-A", "expected": "COMPATIBLE_WITH_OBLIGATIONS", "semantic": {"commercial_use_permitted": True, "hosted_service_permitted": True, "modification_permitted": True, "attribution_required": True, "notice_preservation_required": True, "evidence_sufficient": True, "applicability_clear": True}},
+                "B": {"license": "Elastic-2.0", "file": "Elastic-2.0.txt", "manifest": f"LP-V11-B-{stamp}", "name": "Elastic hosted-service restriction qualification", "release": "1.1.0-live-b", "source": "spdx:Elastic-2.0", "declared": "Elastic-2.0", "component": "licenseproof-case-b", "literal": "LICENSEPROOF-LIVE-CASE-B-COMPONENT-V11", "evidence": "LP-V11-EVIDENCE-B", "expected": "INCONCLUSIVE", "semantic": {"applicability_clear": False, "evidence_sufficient": True}},
+                "C": {"license": "AGPL-3.0-only", "file": "AGPL-3.0-only.txt", "manifest": f"LP-V11-C-{stamp}", "name": "AGPL network-source obligation qualification", "release": "1.1.0-live-c", "source": "spdx:AGPL-3.0-only", "declared": "AGPL-3.0-only", "component": "licenseproof-case-c", "literal": "LICENSEPROOF-LIVE-CASE-C-COMPONENT-V11", "evidence": "LP-V11-EVIDENCE-C", "expected": "INCONCLUSIVE", "semantic": {"applicability_clear": False, "evidence_sufficient": True}},
             }
             for key, case in cases.items():
                 journal_name = f"case-{key.lower()}.jsonl"

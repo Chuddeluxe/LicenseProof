@@ -16,6 +16,8 @@ jobs:
     steps:
       - name: Check out source
         uses: actions/checkout@v4
+        with:
+          fetch-depth: 0  # required for the historical diff range scanned by Gitleaks
 
       - name: Set up Python
         uses: actions/setup-python@v5

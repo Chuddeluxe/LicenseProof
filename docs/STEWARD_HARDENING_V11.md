@@ -1,10 +1,20 @@
-# LicenseProof v1.1 — Steward Hardening / Predeployment Record
+# LicenseProof v1.1 — Steward hardening record
 
-Status: **UNRELEASED, NOT DEPLOYED, NOT SUBMITTED**. The historical v1.0.0 contract, release tag, chain address, and three live examples remain unchanged.
+Status: **HARDENING COMPLETED / DEPLOYED / LIVE-QUALIFIED / PUBLICLY RELEASED / PORTAL NOT YET CONFIRMED**.
 
-This document distinguishes fixes implemented in the v1.1 candidate from assurance boundaries that the contract deliberately does **not** claim. The source, schema, and CI must pass on an exact candidate commit before any successor deployment.
+The historical v1.0.0 contract, release tag, chain address, and three live examples remain unchanged. This document began as the predeployment hardening plan; every engineering gate below has now been executed for v1.1.0. Current deployment and qualification evidence lives in `docs/LIVE_DEPLOYMENT_V11.md`, `docs/LIVE_QUALIFICATION_V11.md`, and `evidence/qualification/v1.1/`.
 
-## Changes implemented in the candidate
+Verified v1.1.0 release facts:
+- Contract: `0x18A850BB8cA6cb0F75a5A9ab95362c12f1E349e6`
+- Deployment tx: `0x0d81881d71a362033fa075780d6b6b5ea90c20251fcce952772f863561db5ca1`
+- Source SHA-256: `354f840a54e57a215790fa70182938ade78f43b505bcf05f8ded37cd4c1135fd`
+- Exact-main CI: `38048824819` SUCCESS
+- Full suite: 83 passed; mutation audit: 29/29 killed; ABI/schema: 28/28 PASS
+- Release: `v1.1.0` on commit `dcac65546f9bce41c83a180dd24f324e227cf9d5`
+
+No Portal submission is claimed without an authenticated Portal confirmation.
+
+## Changes implemented and verified in v1.1.0
 
 | Finding | Disposition |
 |---|---|
@@ -23,22 +33,22 @@ This document distinguishes fixes implemented in the v1.1 candidate from assuran
 
 ## Exact semantics and unassessed boundaries
 
-The candidate's contract is intentionally a **claimed-license-text versus declared-policy assessor**, not an independent package license issuance authority, a legal opinion, or complete dependency-graph compatibility certificate. Package hashes are issuer-declared commitments, not a guarantee that those are upstream artifact hashes. The actor controlling evidence may choose to delay freezing a draft manifest; an incomplete draft must never appear cleared.
+The v1.1.0 contract is intentionally a **claimed-license-text versus declared-policy assessor**, not an independent package license issuance authority, a legal opinion, or complete dependency-graph compatibility certificate. Package hashes are issuer-declared commitments, not a guarantee that those are upstream artifact hashes. The actor controlling evidence may choose to delay freezing a draft manifest; an incomplete draft must never appear cleared.
 
 Its final result is a **component-policy or fail-closed manifest assessment**. In particular, multiple positive component classifications never constitute automatic whole-bundle clearance. Inconclusive is an explicit valid result, not a technical failure. Consensus/RPC errors never become business verdicts.
 
 ## Regression / release gates
 
-The branch includes tests for attacker lineage, one-successor rule, repeat review-start, third-party adverse adjudication, inconclusive condition, multi-component fail-closed aggregation, bounded audit pages, and declared evidence provenance. Source/schema mutation gates include negative checks for tampered committed artifacts and source hashes. The named mutation audit now exercises 29 transformations, including five new steward-sensitive ones.
+The released source includes tests for attacker lineage, one-successor rule, repeat review-start, third-party adverse adjudication, inconclusive condition, multi-component fail-closed aggregation, bounded audit pages, and declared evidence provenance. Source/schema mutation gates include negative checks for tampered committed artifacts and source hashes. The named mutation audit now exercises 29 transformations, including five new steward-sensitive ones.
 
-Before v1.1 deployment:
+Predeployment gates — completed:
 - Exact source digest, schema and interface match at pinned Git head
 - Full remote CI (tests, 29/29 mutants, read-only source/ABI verification, Gitleaks, secret scan) succeeds on candidate HEAD
 - No unresolved security HIGH defects **within the expressly limited v1.1 product scope**
 - Fresh Studio-dev deploy preflight on the exact 5jyc runner
 - Explicit approval for a new contract deployment/signature/fee (old v1.0.0 cannot be upgraded in place)
 
-After deployment:
+Postdeployment gates — completed:
 - Broadcast ONCE using the proven `executionBudgetPerRound=25000000000000000`, `rotations=[3]` profile **only if fresh Studio-dev policy/signer balance still supports it**
 - Persist signed transaction/intent before broadcast; same-hash reconcile; verify finalized successful execution, exact source/ABI and contract_info readback
 - New live v1.1 qualification, including permissionless outsider negative review, `INCONCLUSIVE` conditional use, and the multi-component fail-closed case

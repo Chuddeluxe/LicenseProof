@@ -618,6 +618,8 @@ class LicenseProof(gl.contract.Contract):
             "content_byte_length": content_byte_length,
             "published_at": published_at,
             "observed_at": observed_at,
+            "observed_at_source": "CREATOR_ASSERTED",
+            "committed_at": _message_timestamp(),
             "evidence_type": evidence_type,
         }
         self.evidence_records[evidence_id] = _canonical(evidence)
@@ -912,6 +914,10 @@ class LicenseProof(gl.contract.Contract):
             "runner": RUNNER_ID,
             "semantic_schema_version": SEMANTIC_SCHEMA_VERSION,
             "max_evidence_bytes": MAX_EVIDENCE_BYTES,
+            "assurance_scope": "CLAIMED_LICENSE_TEXT_VS_DECLARED_RELEASE_POLICY",
+            "package_license_authority_verified": False,
+            "cross_component_conflicts_verified": False,
+            "redirect_final_origin_verified_without_metadata": False,
             "policy_states": list(POLICY_STATES),
             "manifest_states": list(MANIFEST_STATES),
             "review_states": list(REVIEW_STATES),

@@ -12,7 +12,7 @@ jobs:
   verify:
     runs-on: ubuntu-latest
     env:
-      EXPECTED_CONTRACT_SHA256: 02be068e55968828556245c27c3511c7a78138216177ba4b65f0464ba316221f
+      EXPECTED_CONTRACT_SHA256: 354f840a54e57a215790fa70182938ade78f43b505bcf05f8ded37cd4c1135fd
     steps:
       - name: Check out source
         uses: actions/checkout@v4

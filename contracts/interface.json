@@ -241,6 +241,24 @@
         }
       ]
     },
+    "get_audit_events_page": {
+      "params": [
+        [
+          "start",
+          "int"
+        ],
+        [
+          "limit",
+          "int"
+        ]
+      ],
+      "readonly": true,
+      "ret": [
+        {
+          "$rep": "string"
+        }
+      ]
+    },
     "get_component": {
       "params": [
         [
@@ -338,6 +356,16 @@
       ]
     },
     "get_manifest_result": {
+      "params": [
+        [
+          "manifest_id",
+          "string"
+        ]
+      ],
+      "readonly": true,
+      "ret": "string"
+    },
+    "get_manifest_successor": {
       "params": [
         [
           "manifest_id",

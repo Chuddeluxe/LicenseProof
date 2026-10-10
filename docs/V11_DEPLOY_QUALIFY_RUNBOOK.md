@@ -20,11 +20,14 @@ The connected GitHub automation cannot access the encrypted local WinCred keysto
 
 From the existing Windows workspace `C:\Users\DELL\LicenseProof`, verify the exact remote and fetch this branch *without overwriting any uncommitted work*. Run the ordinary 5jyc toolchain and tests; remote GitHub CI is necessary but does not prove local wallet readiness.
 
-The v1.1 runner was isolated from historical v1.0 scripts:
+The v1.1 runner was isolated from historical v1.0 scripts. Use module invocation from the repository root so Windows import paths cannot drift:
 
 ```powershell
+python -m scripts.verify_studio_v11
 python -m scripts.live_qualification_v11
 ```
+
+The Studio verifier and live runner canonicalize text-mode source bytes to LF before hashing/submission. A CRLF worktree checkout may have a different **raw filesystem** SHA, but it is not deployed; the canonical LF deployment SHA must equal `docs/SOURCE_HASH.txt`. `.gitattributes` now pins Python and release text files to LF for fresh checkouts.
 
 The default mode is **read-only**. It checks the exact source, chain, 28-method remote schema, and `gen_call type=deploy`; it does not load the wallet.
 
